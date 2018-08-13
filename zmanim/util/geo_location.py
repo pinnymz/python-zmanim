@@ -1,7 +1,7 @@
 import pytz
 from numbers import Number
 from datetime import datetime
-from math_helper import MathHelper
+from zmanim.util.math_helper import MathHelper
 
 
 class GeoLocation(MathHelper):

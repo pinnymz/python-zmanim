@@ -1,9 +1,9 @@
-from noaa_calculator import NOAACalculator
-from geo_location import GeoLocation
+from zmanim.util.noaa_calculator import NOAACalculator
+from zmanim.util.geo_location import GeoLocation
 from datetime import date, datetime, timedelta
 import pytz
-from astronomical_calculations import AstronomicalCalculations
-from math_helper import MathHelper
+from zmanim.util.astronomical_calculations import AstronomicalCalculations
+from zmanim.util.math_helper import MathHelper
 
 
 class AstronomicalCalendar(MathHelper):

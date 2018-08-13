@@ -1,6 +1,6 @@
 import unittest
-import test_helper
-from zmanim_calendar import ZmanimCalendar
+from test import test_helper
+from zmanim.zmanim_calendar import ZmanimCalendar
 from datetime import date
 
 

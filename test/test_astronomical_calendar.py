@@ -1,8 +1,8 @@
 import unittest
-from astronomical_calendar import AstronomicalCalendar
-import test_helper
+from zmanim.astronomical_calendar import AstronomicalCalendar
+from test import test_helper
 from datetime import date
-from math_helper import MathHelper
+from zmanim.util.math_helper import MathHelper
 
 
 class TestAstronomicalCalendar(unittest.TestCase):

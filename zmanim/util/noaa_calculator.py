@@ -1,6 +1,6 @@
-from astronomical_calculations import AstronomicalCalculations
+from zmanim.util.astronomical_calculations import AstronomicalCalculations
 from datetime import date, datetime, time
-from geo_location import GeoLocation
+from zmanim.util.geo_location import GeoLocation
 import julian
 import math
 

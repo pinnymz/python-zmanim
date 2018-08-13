@@ -1,7 +1,7 @@
 import unittest
-from geo_location import GeoLocation
+from zmanim.util.geo_location import GeoLocation
 import pytz
-import test_helper
+from test import test_helper
 from dateutil import parser
 
 

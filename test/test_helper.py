@@ -1,4 +1,4 @@
-from geo_location import GeoLocation
+from zmanim.util.geo_location import GeoLocation
 
 
 def lakewood():

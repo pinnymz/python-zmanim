@@ -1,4 +1,4 @@
-from astronomical_calendar import AstronomicalCalendar
+from zmanim.astronomical_calendar import AstronomicalCalendar
 from datetime import datetime, timedelta
 
 
