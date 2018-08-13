@@ -1,13 +1,12 @@
 import pytz
 from numbers import Number
 from datetime import datetime
+from math_helper import MathHelper
 
 
-class GeoLocation:
-    MINUTE_MILLIS = 60 * 1000
-    HOUR_MILLIS = MINUTE_MILLIS * 60
+class GeoLocation(MathHelper):
 
-    def __init__(self, name: str, latitude: Number, longitude: Number, time_zone, elevation: Number = None):
+    def __init__(self, name: str, latitude: float, longitude: float, time_zone, elevation: float = None):
         self.location_name = name
         self.latitude = latitude
         self.longitude = longitude
@@ -15,7 +14,7 @@ class GeoLocation:
         self.elevation = elevation
 
     @property
-    def latitude(self) -> Number:
+    def latitude(self) -> float:
         return self.__latitude
 
     @latitude.setter
@@ -23,7 +22,7 @@ class GeoLocation:
         if isinstance(latitude, Number):
             if latitude > 90 or latitude < -90:
                 raise ValueError("latitude must be in the range -90..90")
-            self.__latitude = latitude
+            self.__latitude = float(latitude)
         elif isinstance(latitude, (list,tuple)) and len(latitude) == 4:
             degrees, minutes, seconds, direction = latitude[0], latitude[1], latitude[2], latitude[3]
             temp = degrees + ((minutes + (seconds / 60.0)) / 60.0)
@@ -38,7 +37,7 @@ class GeoLocation:
             raise TypeError("input must be a number or a list in the format 'degrees,minutes,seconds,direction'")
 
     @property
-    def longitude(self) -> Number:
+    def longitude(self) -> float:
         return self.__longitude
 
     @longitude.setter
@@ -46,7 +45,7 @@ class GeoLocation:
         if isinstance(longitude, Number):
             if longitude > 180 or longitude < -180:
                 raise ValueError("longitude must be in the range -180..180")
-            self.__longitude = longitude
+            self.__longitude = float(longitude)
         elif isinstance(longitude, (list,tuple)) and len(longitude) == 4:
             degrees, minutes, seconds, direction = longitude[0], longitude[1], longitude[2], longitude[3]
             temp = degrees + ((minutes + (seconds / 60.0)) / 60.0)
@@ -74,7 +73,7 @@ class GeoLocation:
             raise TypeError("input must be a timezone or string")
 
     @property
-    def elevation(self) -> Number:
+    def elevation(self) -> float:
         return self.__elevation
 
     @elevation.setter
@@ -83,7 +82,7 @@ class GeoLocation:
             elevation = 0
         if elevation < 0:
             raise ValueError("elevation cannot be negative")
-        self.__elevation = elevation
+        self.__elevation = float(elevation)
 
     @classmethod
     def GMT(cls):

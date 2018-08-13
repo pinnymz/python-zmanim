@@ -4,6 +4,7 @@ import pytz
 import test_helper
 from dateutil import parser
 
+
 class TestGeoLocation(unittest.TestCase):
 
     def test_GMT(self):
