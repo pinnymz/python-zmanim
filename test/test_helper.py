@@ -35,3 +35,27 @@ def hooper_bay():
 
 def daneborg():
     return GeoLocation('Daneborg, Greenland', 74.2999996, -20.2420877, 'America/Godthab', elevation=0)
+
+
+def standard_chaseirim():
+    return 5777
+
+
+def standard_kesidran():
+    return 5778
+
+
+def standard_shelaimim():
+    return 5770
+
+
+def leap_chaseirim():
+    return 5765
+
+
+def leap_kesidran():
+    return 5755
+
+
+def leap_shelaimim():
+    return 5776
