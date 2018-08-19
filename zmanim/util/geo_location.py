@@ -1,12 +1,12 @@
 import pytz
-from numbers import Number
 from datetime import datetime
 from zmanim.util.math_helper import MathHelper
+from typing import Optional
 
 
 class GeoLocation(MathHelper):
 
-    def __init__(self, name: str, latitude: float, longitude: float, time_zone, elevation: float = None):
+    def __init__(self, name: str, latitude: float, longitude: float, time_zone, elevation: Optional[float] = None):
         self.location_name = name
         self.latitude = latitude
         self.longitude = longitude
@@ -19,7 +19,7 @@ class GeoLocation(MathHelper):
 
     @latitude.setter
     def latitude(self, latitude):
-        if isinstance(latitude, Number):
+        if isinstance(latitude, (int, float)):
             if latitude > 90 or latitude < -90:
                 raise ValueError("latitude must be in the range -90..90")
             self.__latitude = float(latitude)
@@ -42,7 +42,7 @@ class GeoLocation(MathHelper):
 
     @longitude.setter
     def longitude(self, longitude):
-        if isinstance(longitude, Number):
+        if isinstance(longitude, (int, float)):
             if longitude > 180 or longitude < -180:
                 raise ValueError("longitude must be in the range -180..180")
             self.__longitude = float(longitude)
@@ -66,7 +66,7 @@ class GeoLocation(MathHelper):
     @time_zone.setter
     def time_zone(self, time_zone):
         if isinstance(time_zone, str):
-            self.time_zone = pytz.timezone(time_zone)
+            self.__time_zone = pytz.timezone(time_zone)
         elif isinstance(time_zone, pytz.BaseTzInfo):
             self.__time_zone = time_zone
         else:
@@ -104,5 +104,5 @@ class GeoLocation(MathHelper):
         now = datetime.now(tz=self.time_zone)
         return int((now.utcoffset() - now.dst()).total_seconds()) * 1000
 
-    def time_zone_offset_at(self, utc_time) -> float:
+    def time_zone_offset_at(self, utc_time: datetime) -> float:
         return utc_time.astimezone(self.time_zone).utcoffset().total_seconds() / 3600.0

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from datetime import date, timedelta
 from enum import Enum
+from typing import Optional
 import copy
 
 
@@ -27,7 +28,7 @@ class JewishDate:
         elif len(args) == 1 and isinstance(args[0], date):
             self.date = args[0]
         elif len(args) == 1 and isinstance(args[0], int):
-            self.__set_from_molad(*args)
+            self._set_from_molad(*args)
         else:
             raise ValueError("invalid arguments for new JewishDate")
 
@@ -105,10 +106,10 @@ class JewishDate:
 
     def __date(self, gregorian_date):
         self.__gregorian_date = gregorian_date
-        self.__absolute_date = self.__gregorian_date_to_abs_date(gregorian_date)
-        self.__reset_day_of_week()
+        self.__absolute_date = self._gregorian_date_to_abs_date(gregorian_date)
+        self._reset_day_of_week()
         self.__molad_hours = self.__molad_minutes = self.__molad_chalakim = 0
-        jewish_year, jewish_month, jewish_day = self.__jewish_date_from_abs_date(self.__absolute_date)
+        jewish_year, jewish_month, jewish_day = self._jewish_date_from_abs_date(self.__absolute_date)
         self.__jewish_year = jewish_year
         self.__jewish_month = jewish_month
         self.__jewish_day = jewish_day
@@ -139,10 +140,10 @@ class JewishDate:
         month = max_months if month > max_months else month
         max_days = self.days_in_jewish_month(month, year)
         day = max_days if day > max_days else day
-        abs_date = self.__jewish_date_to_abs_date(year, month, day)
+        abs_date = self._jewish_date_to_abs_date(year, month, day)
         if abs_date < 0:
             raise ValueError("unsupported early date")
-        self.date = self.__gregorian_date_from_abs_date(abs_date)
+        self.date = self._gregorian_date_from_abs_date(abs_date)
         self.__molad_hours = hours
         self.__molad_minutes = minutes
         self.__molad_chalakim = chalakim
@@ -180,7 +181,7 @@ class JewishDate:
 
         self.__gregorian_date += timedelta(days=increment)
         self.__absolute_date += increment
-        self.__reset_day_of_week()
+        self._reset_day_of_week()
         self.__jewish_year = y
         self.__jewish_month = m
         self.__jewish_day = d
@@ -210,7 +211,7 @@ class JewishDate:
 
         self.__gregorian_date -= timedelta(days=decrement)
         self.__absolute_date -= decrement
-        self.__reset_day_of_week()
+        self._reset_day_of_week()
         self.__jewish_year = y
         self.__jewish_month = m
         self.__jewish_day = d
@@ -270,12 +271,12 @@ class JewishDate:
         else:
             return self.gregorian_date >= other
 
-    def days_in_gregorian_year(self, year: int = None) -> int:
+    def days_in_gregorian_year(self, year: Optional[int] = None) -> int:
         if year is None:
             year = self.gregorian_year
         return 366 if self.is_gregorian_leap_year(year) else 365
 
-    def days_in_gregorian_month(self, month: int = None, year: int = None) -> int:
+    def days_in_gregorian_month(self, month: Optional[int] = None, year: Optional[int] = None) -> int:
         if month is None:
             month = self.gregorian_month
         if year is None:
@@ -287,12 +288,12 @@ class JewishDate:
         else:
             return 31
 
-    def is_gregorian_leap_year(self, year: int = None) -> bool:
+    def is_gregorian_leap_year(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.gregorian_year
         return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
 
-    def months_in_jewish_year(self, year: int = None) -> int:
+    def months_in_jewish_year(self, year: Optional[int] = None) -> int:
         if year is None:
             year = self.jewish_year
         return 13 if self.is_jewish_leap_year(year) else 12
@@ -300,7 +301,7 @@ class JewishDate:
     # Returns the list of jewish months for a given jewish year in chronological order
     #   sorted_months_in_jewish_year(5779)
     #   => [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-    def sorted_months_in_jewish_year(self, year: int = None) -> list:
+    def sorted_months_in_jewish_year(self, year: Optional[int] = None) -> list:
         if year is None:
             year = self.jewish_year
         return sorted(range(1, self.months_in_jewish_year(year) + 1), key=lambda y: (0 if y >= 7 else 1, y))
@@ -308,17 +309,17 @@ class JewishDate:
     # Returns the number of days in each jewish month for a given jewish year in chronological order
     #   sorted_days_in_jewish_year(5779)
     #   => [(7, 30), (8, 29), (9, 30), (10, 29), (11, 30), (12, 30), (13, 29), (1, 30), (2, 29), (3, 30), (4, 29), (5, 30), (6, 29)]
-    def sorted_days_in_jewish_year(self, year: int = None) -> list:
+    def sorted_days_in_jewish_year(self, year: Optional[int] = None) -> list:
         if year is None:
             year = self.jewish_year
         return list(map(lambda month: (month, self.days_in_jewish_month(month, year)), self.sorted_months_in_jewish_year(year)))
 
-    def days_in_jewish_year(self, year: int = None) -> int:
+    def days_in_jewish_year(self, year: Optional[int] = None) -> int:
         if year is None:
             year = self.jewish_year
-        return self.__jewish_calendar_elapsed_days(year+1) - self.__jewish_calendar_elapsed_days(year)
+        return self._jewish_calendar_elapsed_days(year + 1) - self._jewish_calendar_elapsed_days(year)
 
-    def days_in_jewish_month(self, month: int = None, year: int = None) -> int:
+    def days_in_jewish_month(self, month: Optional[int] = None, year: Optional[int] = None) -> int:
         if month is None:
             month = self.jewish_month
         if year is None:
@@ -333,52 +334,52 @@ class JewishDate:
             return 29
         return 30
 
-    def day_number_of_jewish_year(self, year: int = None, month: int = None, day: int = None) -> int:
+    def day_number_of_jewish_year(self, year: Optional[int] = None, month: Optional[int] = None, day: Optional[int] = None) -> int:
         if year is None:
             year = self.jewish_year
         if month is None:
             month = self.jewish_month
         if day is None:
             day = self.jewish_day
-        month_index = self.__month_number_from_tishrei(year, month) - 1
+        month_index = self._month_number_from_tishrei(year, month) - 1
         prior_months = self.sorted_months_in_jewish_year(year)[:month_index]
         return day + sum(self.days_in_jewish_month(m, year) for m in prior_months)
 
-    def is_cheshvan_long(self, year: int = None) -> bool:
+    def is_cheshvan_long(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.jewish_year
         return self.days_in_jewish_year(year) % 10 == 5
 
-    def is_cheshvan_short(self, year: int = None) -> bool:
+    def is_cheshvan_short(self, year: Optional[int] = None) -> bool:
         return not self.is_cheshvan_long(year)
 
-    def is_kislev_long(self, year: int = None) -> bool:
+    def is_kislev_long(self, year: Optional[int] = None) -> bool:
         return not self.is_kislev_short(year)
 
-    def is_kislev_short(self, year: int = None) -> bool:
+    def is_kislev_short(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.jewish_year
         return self.days_in_jewish_year(year) % 10 == 3
 
-    def is_jewish_leap_year(self, year: int = None) -> bool:
+    def is_jewish_leap_year(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.jewish_year
         return ((7 * year) + 1) % 19 < 7
 
-    def cheshvan_kislev_kviah(self, year: int = None):
+    def cheshvan_kislev_kviah(self, year: Optional[int] = None):
         if year is None:
             year = self.jewish_year
         year_type = (self.days_in_jewish_year(year) % 10) - 3
         return list(self.CHESHVAN_KISLEV_KEVIAH)[year_type]
 
-    def molad(self, month: int = None, year: int = None) -> JewishDate:
+    def molad(self, month: int = None, year: Optional[int] = None) -> JewishDate:
         if month is None:
             month = self.jewish_month
         if year is None:
             year = self.jewish_year
-        return self.from_molad(self.__chalakim_since_molad_tohu(year, month))
+        return self.from_molad(self._chalakim_since_molad_tohu(year, month))
 
-    def jewish_month_name(self, month: int = None) -> str:
+    def jewish_month_name(self, month: Optional[int] = None) -> str:
         if month is None:
             month = self.jewish_month
         return list(self.MONTHS)[month - 1].name
@@ -386,8 +387,8 @@ class JewishDate:
     def jewish_month_from_name(self, month_name: str) -> int:
         return next(m.value for m in self.MONTHS if m.name == month_name)
 
-    def __set_from_molad(self, molad: int):
-        gregorian_date = self.__gregorian_date_from_abs_date(self.__molad_to_abs_date(molad))
+    def _set_from_molad(self, molad: int):
+        gregorian_date = self._gregorian_date_from_abs_date(self._molad_to_abs_date(molad))
         remainder = molad % self.CHALAKIM_PER_DAY
         molad_hours, remainder = divmod(remainder, self.CHALAKIM_PER_HOUR)
         # molad hours start at 18:00, which means that
@@ -401,13 +402,13 @@ class JewishDate:
         self.__molad_minutes = minutes
         self.__molad_chalakim = chalakim
 
-    def __chalakim_since_molad_tohu(self, year: int = None, month: int = None) -> int:
+    def _chalakim_since_molad_tohu(self, year: Optional[int] = None, month: Optional[int] = None) -> int:
         if year is None:
             year = self.jewish_year
         if month is None:
             month = self.jewish_month
         prev_year = year - 1
-        months = self.__month_number_from_tishrei(year, month) - 1
+        months = self._month_number_from_tishrei(year, month) - 1
         cycles, remainder = divmod(prev_year, 19)
         months += int(235 * cycles) + \
             int(12 * remainder) + \
@@ -415,20 +416,20 @@ class JewishDate:
 
         return self.CHALAKIM_MOLAD_TOHU + (self.CHALAKIM_PER_MONTH * months)
 
-    def __month_number_from_tishrei(self, year: int, month: int) -> int:
+    def _month_number_from_tishrei(self, year: int, month: int) -> int:
       leap = self.is_jewish_leap_year(year)
       return 1 + ((month + (6 if leap else 5)) % (13 if leap else 12))
 
-    def __jewish_calendar_elapsed_days(self, year: int) -> int:
-        days, remainder = self.__molad_components_for_year(year)
-        return days + self.__dechiyos_count(year, days, remainder)
+    def _jewish_calendar_elapsed_days(self, year: int) -> int:
+        days, remainder = self._molad_components_for_year(year)
+        return days + self._dechiyos_count(year, days, remainder)
 
-    def __molad_components_for_year(self, year: int) -> (int, int):
-        chalakim = self.__chalakim_since_molad_tohu(year, 7)  # chalakim up to tishrei of given year
+    def _molad_components_for_year(self, year: int) -> (int, int):
+        chalakim = self._chalakim_since_molad_tohu(year, 7)  # chalakim up to tishrei of given year
         days, remainder = divmod(chalakim, self.CHALAKIM_PER_DAY)
         return int(days), int(remainder)
 
-    def __dechiyos_count(self, year: int, days: int, remainder: int) -> int:
+    def _dechiyos_count(self, year: int, days: int, remainder: int) -> int:
         count = 0
         # 'days' is Monday-based due to start of Molad at BaHaRaD
         # add 1 to convert to Sunday-based, '0' represents Shabbos
@@ -441,39 +442,39 @@ class JewishDate:
             count += 1
         return count
 
-    def __jewish_year_start_to_abs_date(self, year: int) -> int:
-        return self.__jewish_calendar_elapsed_days(year) + self.JEWISH_EPOCH + 1
+    def _jewish_year_start_to_abs_date(self, year: int) -> int:
+        return self._jewish_calendar_elapsed_days(year) + self.JEWISH_EPOCH + 1
 
-    def __jewish_date_to_abs_date(self, year: int, month: int, day: int) -> int:
+    def _jewish_date_to_abs_date(self, year: int, month: int, day: int) -> int:
         return self.day_number_of_jewish_year(year, month, day) + \
-          self.__jewish_year_start_to_abs_date(year) - 1
+               self._jewish_year_start_to_abs_date(year) - 1
 
-    def __jewish_date_from_abs_date(self, absolute_date: int) -> (int, int, int):
+    def _jewish_date_from_abs_date(self, absolute_date: int) -> (int, int, int):
         jewish_year = int((absolute_date - self.JEWISH_EPOCH) / 366)
 
         # estimate may be low for CE
-        while absolute_date >= self.__jewish_year_start_to_abs_date(jewish_year + 1):
+        while absolute_date >= self._jewish_year_start_to_abs_date(jewish_year + 1):
             jewish_year += 1
 
         # estimate may be high for BCE
-        while absolute_date < self.__jewish_year_start_to_abs_date(jewish_year):
+        while absolute_date < self._jewish_year_start_to_abs_date(jewish_year):
             jewish_year -= 1
 
         months = self.sorted_months_in_jewish_year(jewish_year)
-        jewish_month = next((m for i, m in enumerate(months[:len(months)-1]) if absolute_date < self.__jewish_date_to_abs_date(jewish_year, months[i+1], 1)), months[len(months)-1])
+        jewish_month = next((m for i, m in enumerate(months[:len(months)-1]) if absolute_date < self._jewish_date_to_abs_date(jewish_year, months[i + 1], 1)), months[len(months) - 1])
 
-        jewish_day = absolute_date - self.__jewish_date_to_abs_date(jewish_year, jewish_month, 1) + 1
+        jewish_day = absolute_date - self._jewish_date_to_abs_date(jewish_year, jewish_month, 1) + 1
 
         return jewish_year, jewish_month, jewish_day
 
-    def __gregorian_date_to_abs_date(self, gregorian_date: date) -> int:
+    def _gregorian_date_to_abs_date(self, gregorian_date: date) -> int:
         return gregorian_date.toordinal()
 
-    def __gregorian_date_from_abs_date(self, absolute_date: int) -> date:
+    def _gregorian_date_from_abs_date(self, absolute_date: int) -> date:
         return date.fromordinal(absolute_date)
 
-    def __molad_to_abs_date(self, chalakim: int) -> int:
+    def _molad_to_abs_date(self, chalakim: int) -> int:
         return int(chalakim / self.CHALAKIM_PER_DAY) + self.JEWISH_EPOCH
 
-    def __reset_day_of_week(self):
+    def _reset_day_of_week(self):
         self.__day_of_week = (self.gregorian_date.isoweekday() % 7) + 1
