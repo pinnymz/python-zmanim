@@ -1,0 +1,3 @@
+class MathHelper:
+    MINUTE_MILLIS = 60 * 1000
+    HOUR_MILLIS = MINUTE_MILLIS * 60
