@@ -1,4 +1,4 @@
-import pytz
+from dateutil import tz
 from datetime import datetime
 from zmanim.util.math_helper import MathHelper
 from typing import Optional
@@ -60,14 +60,14 @@ class GeoLocation(MathHelper):
             raise TypeError("input must be a number or a list in the format 'degrees,minutes,seconds,direction'")
 
     @property
-    def time_zone(self) -> pytz.BaseTzInfo:
+    def time_zone(self) -> tz.tzfile:
         return self.__time_zone
 
     @time_zone.setter
     def time_zone(self, time_zone):
         if isinstance(time_zone, str):
-            self.__time_zone = pytz.timezone(time_zone)
-        elif isinstance(time_zone, pytz.BaseTzInfo):
+            self.__time_zone = tz.gettz(time_zone)
+        elif isinstance(time_zone, tz.tzfile):
             self.__time_zone = time_zone
         else:
             raise TypeError("input must be a timezone or string")

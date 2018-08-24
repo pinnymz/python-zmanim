@@ -367,49 +367,49 @@ class TestJewishDate(unittest.TestCase):
 
     def test_days_in_jewish_year(self):
         subject = JewishDate()
-        years = [(test.test_helper.standard_chaseirim(), 353),
-                 (test.test_helper.standard_kesidran(), 354),
-                 (test.test_helper.standard_shelaimim(), 355),
-                 (test.test_helper.leap_chaseirim(), 383),
-                 (test.test_helper.leap_kesidran(), 384),
-                 (test.test_helper.leap_shelaimim(), 385)]
+        years = [(test.test_helper.standard_monday_chaseirim(), 353),
+                 (test.test_helper.standard_thursday_kesidran(), 354),
+                 (test.test_helper.standard_shabbos_shelaimim(), 355),
+                 (test.test_helper.leap_thursday_chaseirim(), 383),
+                 (test.test_helper.leap_tuesday_kesidran(), 384),
+                 (test.test_helper.leap_monday_shelaimim(), 385)]
 
         result = map(lambda pair: (pair[0], subject.days_in_jewish_year(pair[0])), years)
         self.assertEqual(list(result), years)
 
     def test_days_in_jewish_year_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertEqual(subject.days_in_jewish_year(), 355)
-        subject.jewish_year = test.test_helper.leap_chaseirim()
+        subject.jewish_year = test.test_helper.leap_thursday_chaseirim()
         self.assertEqual(subject.days_in_jewish_year(), 383)
 
     def test_months_in_jewish_year(self):
         subject = JewishDate()
-        self.assertEqual(subject.months_in_jewish_year(test.test_helper.standard_shelaimim()), 12)
-        self.assertEqual(subject.months_in_jewish_year(test.test_helper.leap_chaseirim()), 13)
+        self.assertEqual(subject.months_in_jewish_year(test.test_helper.standard_shabbos_shelaimim()), 12)
+        self.assertEqual(subject.months_in_jewish_year(test.test_helper.leap_thursday_chaseirim()), 13)
 
     def test_months_in_jewish_year_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertEqual(subject.months_in_jewish_year(), 12)
-        subject.jewish_year = test.test_helper.leap_chaseirim()
+        subject.jewish_year = test.test_helper.leap_thursday_chaseirim()
         self.assertEqual(subject.months_in_jewish_year(), 13)
 
     def test_sorted_months_in_jewish_year(self):
         subject = JewishDate()
         standard_months = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
         leap_months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-        self.assertEqual(subject.sorted_months_in_jewish_year(test.test_helper.standard_shelaimim()), standard_months)
-        self.assertEqual(subject.sorted_months_in_jewish_year(test.test_helper.leap_chaseirim()), leap_months)
+        self.assertEqual(subject.sorted_months_in_jewish_year(test.test_helper.standard_shabbos_shelaimim()), standard_months)
+        self.assertEqual(subject.sorted_months_in_jewish_year(test.test_helper.leap_thursday_chaseirim()), leap_months)
 
     def test_sorted_months_in_jewish_year_defaults_to_current_year(self):
         subject = JewishDate()
         standard_months = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
         leap_months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertEqual(subject.sorted_months_in_jewish_year(), standard_months)
-        subject.jewish_year = test.test_helper.leap_chaseirim()
+        subject.jewish_year = test.test_helper.leap_thursday_chaseirim()
         self.assertEqual(subject.sorted_months_in_jewish_year(), leap_months)
 
     def test_sorted_days_in_jewish_year(self):
@@ -419,8 +419,8 @@ class TestJewishDate(unittest.TestCase):
         leap_chaseirim_months = [(7, 30), (8, 29), (9, 29), (10, 29), (11, 30), (12, 30), (13, 29),
                                  (1, 30), (2, 29), (3, 30), (4, 29), (5, 30), (6, 29)]
 
-        self.assertEqual(subject.sorted_days_in_jewish_year(test.test_helper.standard_shelaimim()), standard_shelaimim_months)
-        self.assertEqual(subject.sorted_days_in_jewish_year(test.test_helper.leap_chaseirim()), leap_chaseirim_months)
+        self.assertEqual(subject.sorted_days_in_jewish_year(test.test_helper.standard_shabbos_shelaimim()), standard_shelaimim_months)
+        self.assertEqual(subject.sorted_days_in_jewish_year(test.test_helper.leap_thursday_chaseirim()), leap_chaseirim_months)
 
     def test_sorted_days_in_jewish_year_defaults_to_current_year(self):
         subject = JewishDate()
@@ -429,19 +429,19 @@ class TestJewishDate(unittest.TestCase):
         leap_chaseirim_months = [(7, 30), (8, 29), (9, 29), (10, 29), (11, 30), (12, 30), (13, 29),
                                  (1, 30), (2, 29), (3, 30), (4, 29), (5, 30), (6, 29)]
 
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertEqual(subject.sorted_days_in_jewish_year(), standard_shelaimim_months)
-        subject.jewish_year = test.test_helper.leap_chaseirim()
+        subject.jewish_year = test.test_helper.leap_thursday_chaseirim()
         self.assertEqual(subject.sorted_days_in_jewish_year(), leap_chaseirim_months)
 
     def test_days_in_jewish_month(self):
         subject = JewishDate()
-        years = [(test.test_helper.standard_chaseirim(), [30, 29, 30, 29, 30, 29, 30, 29, 29, 29, 30, 29]),
-                 (test.test_helper.standard_kesidran(), [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29]),
-                 (test.test_helper.standard_shelaimim(), [30, 29, 30, 29, 30, 29, 30, 30, 30, 29, 30, 29]),
-                 (test.test_helper.leap_chaseirim(), [30, 29, 30, 29, 30, 29, 30, 29, 29, 29, 30, 30, 29]),
-                 (test.test_helper.leap_kesidran(), [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 30, 29]),
-                 (test.test_helper.leap_shelaimim(), [30, 29, 30, 29, 30, 29, 30, 30, 30, 29, 30, 30, 29])]
+        years = [(test.test_helper.standard_monday_chaseirim(), [30, 29, 30, 29, 30, 29, 30, 29, 29, 29, 30, 29]),
+                 (test.test_helper.standard_thursday_kesidran(), [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29]),
+                 (test.test_helper.standard_shabbos_shelaimim(), [30, 29, 30, 29, 30, 29, 30, 30, 30, 29, 30, 29]),
+                 (test.test_helper.leap_thursday_chaseirim(), [30, 29, 30, 29, 30, 29, 30, 29, 29, 29, 30, 30, 29]),
+                 (test.test_helper.leap_tuesday_kesidran(), [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 30, 29]),
+                 (test.test_helper.leap_monday_shelaimim(), [30, 29, 30, 29, 30, 29, 30, 30, 30, 29, 30, 30, 29])]
 
         result = map(lambda pair: (pair[0], list(map(lambda month: subject.days_in_jewish_month(month, pair[0]),
                                                      range(1, len(pair[1]) + 1)))),
@@ -449,7 +449,7 @@ class TestJewishDate(unittest.TestCase):
         self.assertEqual(list(result), years)
 
     def test_days_in_jewish_month_defaults_to_current_month_and_year(self):
-        subject = JewishDate(test.test_helper.standard_shelaimim(), 3, 1)
+        subject = JewishDate(test.test_helper.standard_shabbos_shelaimim(), 3, 1)
         self.assertEqual(subject.days_in_jewish_month(), 30)
         subject.jewish_month = 4
         self.assertEqual(subject.days_in_jewish_month(), 29)
@@ -472,104 +472,104 @@ class TestJewishDate(unittest.TestCase):
 
     def test_is_jewish_leap_year(self):
         subject = JewishDate()
-        self.assertFalse(subject.is_jewish_leap_year(test.test_helper.standard_shelaimim()))
-        self.assertTrue((subject.is_jewish_leap_year(test.test_helper.leap_chaseirim())))
+        self.assertFalse(subject.is_jewish_leap_year(test.test_helper.standard_shabbos_shelaimim()))
+        self.assertTrue((subject.is_jewish_leap_year(test.test_helper.leap_thursday_chaseirim())))
 
     def test_is_jewish_leap_year_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertFalse(subject.is_jewish_leap_year())
-        subject.jewish_year = test.test_helper.leap_chaseirim()
+        subject.jewish_year = test.test_helper.leap_thursday_chaseirim()
         self.assertTrue((subject.is_jewish_leap_year()))
 
     def test_is_cheshvan_long(self):
-        years = [(test.test_helper.standard_chaseirim(), False),
-                 (test.test_helper.standard_kesidran(), False),
-                 (test.test_helper.standard_shelaimim(), True),
-                 (test.test_helper.leap_chaseirim(), False),
-                 (test.test_helper.leap_kesidran(), False),
-                 (test.test_helper.leap_shelaimim(), True)]
+        years = [(test.test_helper.standard_monday_chaseirim(), False),
+                 (test.test_helper.standard_thursday_kesidran(), False),
+                 (test.test_helper.standard_shabbos_shelaimim(), True),
+                 (test.test_helper.leap_thursday_chaseirim(), False),
+                 (test.test_helper.leap_tuesday_kesidran(), False),
+                 (test.test_helper.leap_monday_shelaimim(), True)]
         subject = JewishDate()
         result = map(lambda pair: (pair[0], subject.is_cheshvan_long(pair[0])), years)
         self.assertEqual(list(result), years)
 
     def test_is_cheshvan_long_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_chaseirim()
+        subject.jewish_year = test.test_helper.standard_monday_chaseirim()
         self.assertFalse(subject.is_cheshvan_long())
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertTrue(subject.is_cheshvan_long())
 
     def test_is_cheshvan_short(self):
-        years = [(test.test_helper.standard_chaseirim(), True),
-                 (test.test_helper.standard_kesidran(), True),
-                 (test.test_helper.standard_shelaimim(), False),
-                 (test.test_helper.leap_chaseirim(), True),
-                 (test.test_helper.leap_kesidran(), True),
-                 (test.test_helper.leap_shelaimim(), False)]
+        years = [(test.test_helper.standard_monday_chaseirim(), True),
+                 (test.test_helper.standard_thursday_kesidran(), True),
+                 (test.test_helper.standard_shabbos_shelaimim(), False),
+                 (test.test_helper.leap_thursday_chaseirim(), True),
+                 (test.test_helper.leap_tuesday_kesidran(), True),
+                 (test.test_helper.leap_monday_shelaimim(), False)]
         subject = JewishDate()
         result = map(lambda pair: (pair[0], subject.is_cheshvan_short(pair[0])), years)
         self.assertEqual(list(result), years)
 
     def test_is_cheshvan_short_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_chaseirim()
+        subject.jewish_year = test.test_helper.standard_monday_chaseirim()
         self.assertTrue(subject.is_cheshvan_short())
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertFalse(subject.is_cheshvan_short())
 
     def test_is_kislev_long(self):
-        years = [(test.test_helper.standard_chaseirim(), False),
-                 (test.test_helper.standard_kesidran(), True),
-                 (test.test_helper.standard_shelaimim(), True),
-                 (test.test_helper.leap_chaseirim(), False),
-                 (test.test_helper.leap_kesidran(), True),
-                 (test.test_helper.leap_shelaimim(), True)]
+        years = [(test.test_helper.standard_monday_chaseirim(), False),
+                 (test.test_helper.standard_thursday_kesidran(), True),
+                 (test.test_helper.standard_shabbos_shelaimim(), True),
+                 (test.test_helper.leap_thursday_chaseirim(), False),
+                 (test.test_helper.leap_tuesday_kesidran(), True),
+                 (test.test_helper.leap_monday_shelaimim(), True)]
         subject = JewishDate()
         result = map(lambda pair: (pair[0], subject.is_kislev_long(pair[0])), years)
         self.assertEqual(list(result), years)
 
     def test_is_kislev_long_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_chaseirim()
+        subject.jewish_year = test.test_helper.standard_monday_chaseirim()
         self.assertFalse(subject.is_kislev_long())
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertTrue(subject.is_kislev_long())
 
     def test_is_kislev_short(self):
-        years = [(test.test_helper.standard_chaseirim(), True),
-                 (test.test_helper.standard_kesidran(), False),
-                 (test.test_helper.standard_shelaimim(), False),
-                 (test.test_helper.leap_chaseirim(), True),
-                 (test.test_helper.leap_kesidran(), False),
-                 (test.test_helper.leap_shelaimim(), False)]
+        years = [(test.test_helper.standard_monday_chaseirim(), True),
+                 (test.test_helper.standard_thursday_kesidran(), False),
+                 (test.test_helper.standard_shabbos_shelaimim(), False),
+                 (test.test_helper.leap_thursday_chaseirim(), True),
+                 (test.test_helper.leap_tuesday_kesidran(), False),
+                 (test.test_helper.leap_monday_shelaimim(), False)]
         subject = JewishDate()
         result = map(lambda pair: (pair[0], subject.is_kislev_short(pair[0])), years)
         self.assertEqual(list(result), years)
 
     def test_is_kislev_short_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_chaseirim()
+        subject.jewish_year = test.test_helper.standard_monday_chaseirim()
         self.assertTrue(subject.is_kislev_short())
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertFalse(subject.is_kislev_short())
 
     def test_cheshvan_kislev_kviah(self):
-        years = [(test.test_helper.standard_chaseirim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.chaseirim),
-                 (test.test_helper.standard_kesidran(), JewishDate.CHESHVAN_KISLEV_KEVIAH.kesidran),
-                 (test.test_helper.standard_shelaimim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.shelaimim),
-                 (test.test_helper.leap_chaseirim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.chaseirim),
-                 (test.test_helper.leap_kesidran(), JewishDate.CHESHVAN_KISLEV_KEVIAH.kesidran),
-                 (test.test_helper.leap_shelaimim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.shelaimim)]
+        years = [(test.test_helper.standard_monday_chaseirim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.chaseirim),
+                 (test.test_helper.standard_thursday_kesidran(), JewishDate.CHESHVAN_KISLEV_KEVIAH.kesidran),
+                 (test.test_helper.standard_shabbos_shelaimim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.shelaimim),
+                 (test.test_helper.leap_thursday_chaseirim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.chaseirim),
+                 (test.test_helper.leap_tuesday_kesidran(), JewishDate.CHESHVAN_KISLEV_KEVIAH.kesidran),
+                 (test.test_helper.leap_monday_shelaimim(), JewishDate.CHESHVAN_KISLEV_KEVIAH.shelaimim)]
         subject = JewishDate()
         result = map(lambda pair: (pair[0], subject.cheshvan_kislev_kviah(pair[0])), years)
         self.assertEqual(list(result), years)
 
     def test_cheshvan_kislev_kviah_defaults_to_current_year(self):
         subject = JewishDate()
-        subject.jewish_year = test.test_helper.standard_chaseirim()
+        subject.jewish_year = test.test_helper.standard_monday_chaseirim()
         self.assertEqual(subject.cheshvan_kislev_kviah(), JewishDate.CHESHVAN_KISLEV_KEVIAH.chaseirim)
-        subject.jewish_year = test.test_helper.standard_shelaimim()
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertEqual(subject.cheshvan_kislev_kviah(), JewishDate.CHESHVAN_KISLEV_KEVIAH.shelaimim)
 
     def test_molad(self):

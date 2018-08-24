@@ -1,8 +1,8 @@
 import unittest
 from zmanim.util.geo_location import GeoLocation
-import pytz
 from test import test_helper
-from dateutil import parser
+from dateutil import parser, tz
+from datetime import datetime
 
 
 class TestGeoLocation(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestGeoLocation(unittest.TestCase):
         self.assertEqual(gmt.location_name, 'Greenwich, England')
         self.assertEqual(gmt.longitude, 0)
         self.assertEqual(gmt.latitude, 51.4772)
-        self.assertEqual(gmt.time_zone.zone, 'GMT')
+        self.assertTrue(gmt.time_zone._filename.endswith('/GMT'))
         self.assertEqual(gmt.elevation, 0)
 
     def test_latitude_numeric(self):
@@ -48,12 +48,12 @@ class TestGeoLocation(unittest.TestCase):
     def test_time_zone_with_string(self):
         geo = GeoLocation.GMT()
         geo.time_zone = 'America/New_York'
-        self.assertEqual(geo.time_zone.zone, 'America/New_York')
+        self.assertTrue(geo.time_zone._filename.endswith('/America/New_York'))
 
     def test_time_zone_with_timezone_object(self):
         geo = GeoLocation.GMT()
-        geo.time_zone = pytz.timezone('America/New_York')
-        self.assertEqual(geo.time_zone.zone, 'America/New_York')
+        geo.time_zone = tz.gettz('America/New_York')
+        self.assertTrue(geo.time_zone._filename.endswith('/America/New_York'))
 
     def test_antimeridian_adjustment_for_gmt(self):
         geo = GeoLocation.GMT()
@@ -113,6 +113,7 @@ class TestGeoLocation(unittest.TestCase):
 
         for entry in expected:
             self.assertEqual(test_entry(entry[0], entry[1]), entry)
+
 
 if __name__ == '__main__':
     unittest.main()
