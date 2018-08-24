@@ -1,8 +1,9 @@
-from zmanim.util.astronomical_calculations import AstronomicalCalculations
-from datetime import date
-from zmanim.util.geo_location import GeoLocation
 import math
+from datetime import date
 from typing import Optional
+
+from zmanim.util.astronomical_calculations import AstronomicalCalculations
+from zmanim.util.geo_location import GeoLocation
 
 
 class SunTimesCalculator(AstronomicalCalculations):

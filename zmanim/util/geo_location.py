@@ -1,7 +1,9 @@
-from dateutil import tz
 from datetime import datetime
-from zmanim.util.math_helper import MathHelper
 from typing import Optional
+
+from dateutil import tz
+
+from zmanim.util.math_helper import MathHelper
 
 
 class GeoLocation(MathHelper):

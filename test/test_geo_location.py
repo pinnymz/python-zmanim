@@ -1,8 +1,9 @@
 import unittest
-from zmanim.util.geo_location import GeoLocation
-from test import test_helper
+
 from dateutil import parser, tz
-from datetime import datetime
+
+from test import test_helper
+from zmanim.util.geo_location import GeoLocation
 
 
 class TestGeoLocation(unittest.TestCase):

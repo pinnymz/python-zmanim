@@ -1,5 +1,5 @@
-from zmanim.util.geo_location import GeoLocation
 from zmanim.hebrew_calendar.jewish_calendar import JewishCalendar
+from zmanim.util.geo_location import GeoLocation
 
 
 def lakewood():

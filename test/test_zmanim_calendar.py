@@ -1,7 +1,8 @@
 import unittest
+from datetime import date
+
 from test import test_helper
 from zmanim.zmanim_calendar import ZmanimCalendar
-from datetime import date
 
 
 class TestZmanimCalendar(unittest.TestCase):

@@ -1,9 +1,11 @@
-from zmanim.util.astronomical_calculations import AstronomicalCalculations
-from datetime import date, datetime, time
-from zmanim.util.geo_location import GeoLocation
-import julian
 import math
+from datetime import date, datetime, time
 from typing import Optional
+
+import julian
+
+from zmanim.util.astronomical_calculations import AstronomicalCalculations
+from zmanim.util.geo_location import GeoLocation
 
 
 class NOAACalculator(AstronomicalCalculations):

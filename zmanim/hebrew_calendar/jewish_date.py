@@ -1,8 +1,9 @@
 from __future__ import annotations
+
+import copy
 from datetime import date, timedelta
 from enum import Enum
 from typing import Optional
-import copy
 
 
 class JewishDate:

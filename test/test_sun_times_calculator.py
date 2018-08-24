@@ -1,7 +1,9 @@
 import unittest
+
+from dateutil import parser
+
 from zmanim.util.geo_location import GeoLocation
 from zmanim.util.sun_times_calculator import SunTimesCalculator
-from dateutil import parser
 
 
 class TestSunTimesCalculator(unittest.TestCase):

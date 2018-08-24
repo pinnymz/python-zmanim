@@ -1,9 +1,11 @@
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Optional
+
+from dateutil import tz
+
 from zmanim.hebrew_calendar.jewish_date import JewishDate
 from zmanim.util.geo_location import GeoLocation
-from typing import Optional
-from enum import Enum
-from datetime import datetime, timedelta
-from dateutil import tz
 
 
 class JewishCalendar(JewishDate):

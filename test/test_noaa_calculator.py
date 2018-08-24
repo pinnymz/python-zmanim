@@ -1,7 +1,9 @@
 import unittest
+
+from dateutil import parser
+
 from zmanim.util.geo_location import GeoLocation
 from zmanim.util.noaa_calculator import NOAACalculator
-from dateutil import parser
 
 
 class TestNOAACalculator(unittest.TestCase):
