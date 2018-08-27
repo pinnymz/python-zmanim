@@ -86,6 +86,11 @@ class GeoLocation(MathHelper):
             raise ValueError("elevation cannot be negative")
         self.__elevation = float(elevation)
 
+    def __repr__(self):
+        return "%s(name=%r, latitude=%r, longitude=%r, time_zone=%r, elevation=%r)" % \
+               (self.__module__ + "." + self.__class__.__qualname__, self.location_name, self.latitude, self.longitude,
+                self.time_zone, self.elevation)
+
     @classmethod
     def GMT(cls):
         return cls('Greenwich, England', 51.4772, 0, 'GMT')

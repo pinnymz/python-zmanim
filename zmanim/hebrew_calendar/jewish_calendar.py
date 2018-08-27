@@ -29,6 +29,11 @@ class JewishCalendar(JewishDate):
         self.in_israel = False if in_israel is None else in_israel
         self.use_modern_holidays = False
 
+    def __repr__(self):
+        return "<%s in_israel=%r, gregorian_date=%r, jewish_date=%r, day_of_week=%r, molad_hours=%r, molad_minutes=%r, molad_chalakim=%r>" % \
+               (self.__module__ + "." + self.__class__.__qualname__, self.in_israel, self.gregorian_date,
+                self.jewish_date, self.day_of_week, self.molad_hours, self.molad_minutes, self.molad_chalakim)
+
     def significant_day(self) -> Optional[str]:
         return getattr(self, f'_{self.jewish_month_name()}_significant_day', None)()
 

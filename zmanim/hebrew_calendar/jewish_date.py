@@ -33,6 +33,11 @@ class JewishDate:
         else:
             raise ValueError("invalid arguments for new JewishDate")
 
+    def __repr__(self):
+        return "<%s gregorian_date=%r, jewish_date=%r, day_of_week=%r, molad_hours=%r, molad_minutes=%r, molad_chalakim=%r>" % \
+               (self.__module__ + "." + self.__class__.__qualname__, self.gregorian_date,
+                self.jewish_date, self.day_of_week, self.molad_hours, self.molad_minutes, self.molad_chalakim)
+
     @property
     def gregorian_date(self) -> date:
         return self.__gregorian_date

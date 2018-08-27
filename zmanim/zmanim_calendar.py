@@ -9,6 +9,11 @@ class ZmanimCalendar(AstronomicalCalendar):
         super(ZmanimCalendar, self).__init__(*args, **kwargs)
         self.candle_lighting_offset = 18 if candle_lighting_offset is None else candle_lighting_offset
 
+    def __repr__(self):
+        return "%s(candle_lighting_offset=%r, geo_location=%r, date=%r, calculator=%r)" % \
+               (self.__module__ + "." + self.__class__.__qualname__, self.candle_lighting_offset,
+                self.geo_location, self.date, self.astronomical_calculator)
+
     def tzais(self, opts: dict = {'degrees': 8.5}) -> Optional[datetime]:
         degrees, offset = self._extract_degrees_offset(opts)
         return self._offset_by_minutes(self.sunset_offset_by_degrees(self.GEOMETRIC_ZENITH + degrees), offset)

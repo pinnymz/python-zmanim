@@ -28,6 +28,10 @@ class AstronomicalCalendar(MathHelper):
         self.date = date
         self.astronomical_calculator = calculator
 
+    def __repr__(self):
+        return "%s(geo_location=%r, date=%r, calculator=%r)" % \
+               (self.__module__ + "." + self.__class__.__qualname__, self.geo_location, self.date, self.astronomical_calculator)
+
     def sunrise(self) -> Optional[datetime]:
         return self._date_time_from_time_of_day(self.utc_sunrise(self.GEOMETRIC_ZENITH), 'sunrise')
 
