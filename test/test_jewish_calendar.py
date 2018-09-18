@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime, timedelta
 
-from dateutil import tz
+from dateutil import tz, parser
 
 import test.test_helper
 from zmanim.hebrew_calendar.jewish_calendar import JewishCalendar
@@ -423,6 +423,123 @@ class TestJewishCalendar(unittest.TestCase):
         all_days = [item for sublist in all_days for item in sublist]  # flatten
         for expected_day in ['1-27', '2-4', '2-5', '2-28']:
             self.assertNotIn(expected_day, all_days)  # should not be assur
+
+    def test_is_assur_bemelacha_outside_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_assur_bemelacha()).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+        expected_yom_tov = ['7-1', '7-2', '7-10', '7-15', '7-16', '7-22', '7-23',
+                            '1-15', '1-16', '1-21', '1-22', '3-6', '3-7']
+        expected_shabbosos = test.test_helper.all_days_matching(year, lambda c: c.day_of_week == 7).values()
+        expected_shabbosos = [item for sublist in expected_shabbosos for item in sublist]  # flatten
+
+        self.assertEqual(sorted(all_days), sorted(list(set().union(expected_yom_tov, expected_shabbosos))))
+
+    def test_is_assur_bemelacha_in_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_assur_bemelacha(), in_israel=True).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+        expected_yom_tov = ['7-1', '7-2', '7-10', '7-15', '7-22', '1-15', '1-21', '3-6']
+        expected_shabbosos = test.test_helper.all_days_matching(year, lambda c: c.day_of_week == 7).values()
+        expected_shabbosos = [item for sublist in expected_shabbosos for item in sublist]  # flatten
+
+        self.assertEqual(sorted(all_days), sorted(list(set().union(expected_yom_tov, expected_shabbosos))))
+
+    def test_is_tomorrow_assur_bemelacha_outside_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_tomorrow_assur_bemelacha()).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+        expected_erev_yom_tov = ['7-9', '7-14', '7-21', '1-14', '1-20', '3-5', '6-29']
+        expected_erev_yom_tov_sheni = ['7-1', '7-15', '7-22', '1-15', '1-21', '3-6']
+
+        expected_erev_shabbos = test.test_helper.all_days_matching(year, lambda c: c.day_of_week == 6).values()
+        expected_erev_shabbos = [item for sublist in expected_erev_shabbos for item in sublist]  # flatten
+
+        expected = list(set().union(expected_erev_yom_tov, expected_erev_yom_tov_sheni, expected_erev_shabbos))
+        self.assertEqual(sorted(all_days), sorted(expected))
+
+    def test_is_tomorrow_assur_bemelacha_in_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_tomorrow_assur_bemelacha(), in_israel=True).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+        expected_erev_yom_tov = ['7-9', '7-14', '7-21', '1-14', '1-20', '3-5', '6-29']
+        expected_erev_yom_tov_sheni = ['7-1']
+
+        expected_erev_shabbos = test.test_helper.all_days_matching(year, lambda c: c.day_of_week == 6).values()
+        expected_erev_shabbos = [item for sublist in expected_erev_shabbos for item in sublist]  # flatten
+
+        expected = list(set().union(expected_erev_yom_tov, expected_erev_yom_tov_sheni, expected_erev_shabbos))
+        self.assertEqual(sorted(all_days), sorted(expected))
+
+    def test_has_delayed_candle_lighting_for_non_candle_lighting_day(self):
+        date = '2018-09-13'
+        subject = JewishCalendar(parser.parse(date))
+        self.assertFalse(subject.has_delayed_candle_lighting())
+
+    def test_has_delayed_candle_lighting_for_standard_erev_shabbos(self):
+        date = '2018-09-14'
+        subject = JewishCalendar(parser.parse(date))
+        self.assertFalse(subject.has_delayed_candle_lighting())
+
+    def test_has_delayed_candle_lighting_for_standard_erev_yom_tov(self):
+        date = '2018-09-30'
+        subject = JewishCalendar(parser.parse(date))
+        self.assertFalse(subject.has_delayed_candle_lighting())
+
+    def test_has_delayed_candle_lighting_for_standard_first_day_yom_tov(self):
+        date = '2018-10-01'
+        subject = JewishCalendar(parser.parse(date))
+        self.assertTrue(subject.has_delayed_candle_lighting())
+
+    def test_has_delayed_candle_lighting_for_yom_tov_erev_shabbos(self):
+        date = '2019-04-26'
+        subject = JewishCalendar(parser.parse(date))
+        self.assertFalse(subject.has_delayed_candle_lighting())
+
+    def test_has_delayed_candle_lighting_for_shabbos_followed_by_yom_tov(self):
+        date = '2019-06-08'
+        subject = JewishCalendar(parser.parse(date))
+        self.assertTrue(subject.has_delayed_candle_lighting())
+
+    def test_is_yom_tov_sheni_outside_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_yom_tov_sheni()).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+
+        expected_days = ['7-2', '7-16', '7-23', '1-16', '1-22', '3-7']
+        self.assertEqual(all_days, expected_days)
+
+    def test_is_yom_tov_sheni_in_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_yom_tov_sheni(), in_israel=True).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+
+        expected_days = ['7-2']
+        self.assertEqual(all_days, expected_days)
+
+    def test_is_erev_yom_tov_sheni_outside_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_erev_yom_tov_sheni()).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+
+        expected_days = ['7-1', '7-15', '7-22', '1-15', '1-21', '3-6']
+        self.assertEqual(all_days, expected_days)
+
+    def test_is_erev_yom_tov_sheni_in_israel(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_erev_yom_tov_sheni(), in_israel=True).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+
+        expected_days = ['7-1']
+        self.assertEqual(all_days, expected_days)
 
     def test_is_chol_hamoed_outside_israel(self):
         year = test.test_helper.leap_shabbos_shelaimim()

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="zmanim",
-    version="0.0.2",
+    version="0.1.0",
     author="Pinny Markowitz",
     author_email="pinny@mwitz.com",
     description="A Zmanim library for Python",

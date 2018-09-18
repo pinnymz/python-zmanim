@@ -94,7 +94,7 @@ def leap_shabbos_shelaimim():
     return 5763
 
 
-def all_days_matching(year, matcher, in_israel = False, use_modern_holidays = False):
+def all_days_matching(year, matcher, in_israel=False, use_modern_holidays=False):
     calendar = JewishCalendar(year, 7, 1)
     calendar.in_israel = in_israel
     calendar.use_modern_holidays = use_modern_holidays

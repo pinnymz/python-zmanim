@@ -37,6 +37,18 @@ class JewishCalendar(JewishDate):
     def significant_day(self) -> Optional[str]:
         return getattr(self, f'_{self.jewish_month_name()}_significant_day', None)()
 
+    def is_assur_bemelacha(self) -> bool:
+        return self.day_of_week == 7 or self.is_yom_tov_assur_bemelacha()
+
+    def is_tomorrow_assur_bemelacha(self) -> bool:
+        return self.day_of_week == 6 or self.is_erev_yom_tov() or self.is_erev_yom_tov_sheni()
+
+    def has_candle_lighting(self) -> bool:
+        return self.is_tomorrow_assur_bemelacha()
+
+    def has_delayed_candle_lighting(self) -> bool:
+        return self.day_of_week != 6 and self.has_candle_lighting() and self.is_assur_bemelacha()
+
     def is_yom_tov(self) -> bool:
         sd = self.significant_day()
         return sd is not None \
@@ -47,15 +59,31 @@ class JewishCalendar(JewishDate):
         return self.significant_day() in ['pesach', 'shavuos', 'rosh_hashana', 'yom_kippur',
                                           'succos', 'shemini_atzeres', 'simchas_torah']
 
-    def is_chol_hamoed(self) -> bool:
-        sd = self.significant_day()
-        return sd is not None and (sd.startswith('chol_hamoed_') or sd == 'hoshana_rabbah')
-
     def is_erev_yom_tov(self) -> bool:
         sd = self.significant_day()
         return sd is not None and (sd.startswith('erev_')
                                    or sd == 'hoshana_rabbah'
                                    or (sd == 'chol_hamoed_pesach' and self.jewish_day == 20))
+
+    def is_yom_tov_sheni(self) -> bool:
+        return ((self.jewish_month == 7 and self.jewish_day == 2)
+                or (not self.in_israel and (
+                    (self.jewish_month == 7 and self.jewish_day in [16, 23]) or
+                    (self.jewish_month == 1 and self.jewish_day in [16, 22]) or
+                    (self.jewish_month == 3 and self.jewish_day == 7)
+                )))
+
+    def is_erev_yom_tov_sheni(self) -> bool:
+        return ((self.jewish_month == 7 and self.jewish_day == 1)
+                or (not self.in_israel and (
+                    (self.jewish_month == 7 and self.jewish_day in [15, 22]) or
+                    (self.jewish_month == 1 and self.jewish_day in [15, 21]) or
+                    (self.jewish_month == 3 and self.jewish_day == 6)
+                )))
+
+    def is_chol_hamoed(self) -> bool:
+        sd = self.significant_day()
+        return sd is not None and (sd.startswith('chol_hamoed_') or sd == 'hoshana_rabbah')
 
     def is_taanis(self) -> bool:
         return self.significant_day() in ['seventeen_of_tammuz', 'tisha_beav', 'tzom_gedalyah',
