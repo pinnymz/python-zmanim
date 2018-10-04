@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import copy
 from datetime import date, timedelta
 from enum import Enum
@@ -47,7 +45,7 @@ class JewishDate:
         return self.gregorian_date.year
 
     @gregorian_year.setter
-    def gregorian_year(self, year: int) -> JewishDate:
+    def gregorian_year(self, year: int):
         self.set_gregorian_date(year, self.gregorian_month, self.gregorian_day)
 
     @property
@@ -55,7 +53,7 @@ class JewishDate:
         return self.gregorian_date.month
 
     @gregorian_month.setter
-    def gregorian_month(self, month: int) -> JewishDate:
+    def gregorian_month(self, month: int):
         self.set_gregorian_date(self.gregorian_year, month, self.gregorian_day)
 
     @property
@@ -63,7 +61,7 @@ class JewishDate:
         return self.gregorian_date.day
 
     @gregorian_day.setter
-    def gregorian_day(self, day: int) -> JewishDate:
+    def gregorian_day(self, day: int):
         self.set_gregorian_date(self.gregorian_year, self.gregorian_month, day)
 
     @property
@@ -123,18 +121,18 @@ class JewishDate:
     date = property(fset=__date)
 
     @classmethod
-    def from_molad(cls, molad: int) -> JewishDate:
+    def from_molad(cls, molad: int):
         return cls(molad)
 
     @classmethod
-    def from_jewish_date(cls, year: int, month: int, date: int) -> JewishDate:
+    def from_jewish_date(cls, year: int, month: int, date: int):
         return cls(year, month, date)
 
     @classmethod
-    def from_date(cls, date: date) -> JewishDate:
+    def from_date(cls, date: date):
         return cls(date)
 
-    def reset_date(self) -> JewishDate:
+    def reset_date(self):
         self.date = date.today()
         return self
 
@@ -161,7 +159,7 @@ class JewishDate:
         day = max_days if day > max_days else day
         self.date = date(year, month, day)
 
-    def forward(self, increment: int = 1) -> JewishDate:
+    def forward(self, increment: int = 1):
         if increment < 0:
             return self.back(-increment)
         if increment > 500:
@@ -193,7 +191,7 @@ class JewishDate:
         self.__jewish_day = d
         return self
 
-    def back(self, decrement: int = 1) -> JewishDate:
+    def back(self, decrement: int = 1):
         if decrement < 0:
             return self.forward(-decrement)
         if decrement > 500:
@@ -223,7 +221,7 @@ class JewishDate:
         self.__jewish_day = d
         return self
 
-    def __add__(self, addend) -> JewishDate:
+    def __add__(self, addend):
         if isinstance(addend, int):
             return copy.copy(self).forward(addend)
         elif isinstance(addend, timedelta):
@@ -378,7 +376,7 @@ class JewishDate:
         year_type = (self.days_in_jewish_year(year) % 10) - 3
         return list(self.CHESHVAN_KISLEV_KEVIAH)[year_type]
 
-    def molad(self, month: int = None, year: Optional[int] = None) -> JewishDate:
+    def molad(self, month: int = None, year: Optional[int] = None):
         if month is None:
             month = self.jewish_month
         if year is None:
