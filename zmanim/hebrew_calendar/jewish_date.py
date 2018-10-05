@@ -121,18 +121,18 @@ class JewishDate:
     date = property(fset=__date)
 
     @classmethod
-    def from_molad(cls, molad: int):
+    def from_molad(cls, molad: int) -> 'JewishDate':
         return cls(molad)
 
     @classmethod
-    def from_jewish_date(cls, year: int, month: int, date: int):
+    def from_jewish_date(cls, year: int, month: int, date: int) -> 'JewishDate':
         return cls(year, month, date)
 
     @classmethod
-    def from_date(cls, date: date):
+    def from_date(cls, date: date) -> 'JewishDate':
         return cls(date)
 
-    def reset_date(self):
+    def reset_date(self) -> 'JewishDate':
         self.date = date.today()
         return self
 
@@ -159,7 +159,7 @@ class JewishDate:
         day = max_days if day > max_days else day
         self.date = date(year, month, day)
 
-    def forward(self, increment: int = 1):
+    def forward(self, increment: int = 1) -> 'JewishDate':
         if increment < 0:
             return self.back(-increment)
         if increment > 500:
@@ -191,7 +191,7 @@ class JewishDate:
         self.__jewish_day = d
         return self
 
-    def back(self, decrement: int = 1):
+    def back(self, decrement: int = 1) -> 'JewishDate':
         if decrement < 0:
             return self.forward(-decrement)
         if decrement > 500:
@@ -221,7 +221,7 @@ class JewishDate:
         self.__jewish_day = d
         return self
 
-    def __add__(self, addend):
+    def __add__(self, addend) -> 'JewishDate':
         if isinstance(addend, int):
             return copy.copy(self).forward(addend)
         elif isinstance(addend, timedelta):
@@ -376,7 +376,7 @@ class JewishDate:
         year_type = (self.days_in_jewish_year(year) % 10) - 3
         return list(self.CHESHVAN_KISLEV_KEVIAH)[year_type]
 
-    def molad(self, month: int = None, year: Optional[int] = None):
+    def molad(self, month: int = None, year: Optional[int] = None) -> 'JewishDate':
         if month is None:
             month = self.jewish_month
         if year is None:
