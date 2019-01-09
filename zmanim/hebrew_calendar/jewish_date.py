@@ -163,7 +163,7 @@ class JewishDate:
         if increment < 0:
             return self.back(-increment)
         if increment > 500:
-            self.date = gregorian_date + timedelta(days=increment)
+            self.date = self.gregorian_date + timedelta(days=increment)
             return self
         days_of_year = self.sorted_days_in_jewish_year()
         y, m, d = self.jewish_year, self.jewish_month, self.jewish_day
@@ -195,7 +195,7 @@ class JewishDate:
         if decrement < 0:
             return self.forward(-decrement)
         if decrement > 500:
-            self.date = gregorian_date - timedelta(days=decrement)
+            self.date = self.gregorian_date - timedelta(days=decrement)
             return self
         days_of_year = self.sorted_days_in_jewish_year()
         y, m, d = self.jewish_year, self.jewish_month, self.jewish_day
