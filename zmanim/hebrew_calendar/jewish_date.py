@@ -5,7 +5,22 @@ from typing import Optional
 
 
 class JewishDate:
-    MONTHS = Enum('Months', 'nissan iyar sivan tammuz av elul tishrei cheshvan kislev teves shevat adar adar_ii')
+        MONTHS = Enum(
+        value='Months',
+        names=[('Nissan'),
+               ('Iyar'),
+               ('Sivan'),
+               ('Tammuz'),
+               ('Av'),
+               ('Elul'),
+               ('Tishrei'),
+               ('Cheshvan'),
+               ('Kislev'),
+               ('Teves'),
+               ('Shevat'),
+               ('Adar'),
+               ('Adar II'),])
+
 
     RD = date(1, 1, 1)
     JEWISH_EPOCH = -1373429
