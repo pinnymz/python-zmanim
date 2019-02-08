@@ -91,7 +91,7 @@ class AstronomicalCalendar(MathHelper):
         seconds, microseconds = divmod(remainder * 10**6, 10**6)
         adjusted_date = self._adjusted_date()
         year, month, day = adjusted_date.year, adjusted_date.month, adjusted_date.day
-        utc_time = datetime(year, month, day, int(hours), int(minutes), int(seconds), int(microseconds), tzinfo=tz.UTC)
+        utc_time = datetime(year, month, day, int(hours), int(minutes), int(seconds), int(microseconds), tzinfo=tz.tzutc())
 
         # adjust date if utc time reflects a wraparound from the local offset
         local_offset = (self.geo_location.local_mean_time_offset() + self.geo_location.standard_time_offset()) / self.HOUR_MILLIS
