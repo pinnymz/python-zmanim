@@ -1,7 +1,7 @@
 import unittest
 
-from zmanim.limudim.calculators.parsha import Parsha
 from zmanim.hebrew_calendar.jewish_date import JewishDate
+from zmanim.limudim.calculators.parsha import Parsha
 
 
 class TestParshaCalculator(unittest.TestCase):

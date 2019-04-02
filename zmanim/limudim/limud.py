@@ -1,9 +1,9 @@
 from typing import Optional
 
 from zmanim.hebrew_calendar.jewish_date import JewishDate
+from zmanim.limudim.cycle import Cycle
 from zmanim.limudim.interval import Interval
 from zmanim.limudim.unit import Unit
-from zmanim.limudim.cycle import Cycle
 
 
 class Limud:

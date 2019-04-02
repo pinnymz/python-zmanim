@@ -1,12 +1,12 @@
-from typing import Optional, Union
 from functools import reduce
+from typing import Optional, Union
 
 from zmanim.hebrew_calendar.jewish_date import JewishDate
 from zmanim.limudim.anchor import Anchor
 from zmanim.limudim.cycle import Cycle
 from zmanim.limudim.interval import Interval
-from zmanim.limudim.unit import Unit
 from zmanim.limudim.limud import Limud
+from zmanim.limudim.unit import Unit
 
 
 class LimudCalculator:

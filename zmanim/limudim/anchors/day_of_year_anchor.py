@@ -1,7 +1,7 @@
 from typing import Optional
 
-from zmanim.limudim.anchor import Anchor
 from zmanim.hebrew_calendar.jewish_date import JewishDate
+from zmanim.limudim.anchor import Anchor
 
 
 class DayOfYearAnchor(Anchor):

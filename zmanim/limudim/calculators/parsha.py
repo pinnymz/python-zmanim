@@ -1,11 +1,11 @@
-from typing import Optional
 from functools import reduce
+from typing import Optional
 
 from zmanim.hebrew_calendar.jewish_date import JewishDate
-from zmanim.limudim.limud_calculator import LimudCalculator
-from zmanim.limudim.cycle import Cycle
 from zmanim.limudim.anchor import Anchor
 from zmanim.limudim.anchors.day_of_year_anchor import DayOfYearAnchor
+from zmanim.limudim.cycle import Cycle
+from zmanim.limudim.limud_calculator import LimudCalculator
 
 
 class Parsha(LimudCalculator):
