@@ -370,11 +370,21 @@ class JewishDate:
             year = self.jewish_year
         return ((7 * year) + 1) % 19 < 7
 
-    def cheshvan_kislev_kviah(self, year: Optional[int] = None):
+    def cheshvan_kislev_kviah(self, year: Optional[int] = None) -> str:
         if year is None:
             year = self.jewish_year
         year_type = (self.days_in_jewish_year(year) % 10) - 3
         return list(self.CHESHVAN_KISLEV_KEVIAH)[year_type]
+
+    def kviah(self, year: Optional[int] = None) -> tuple:
+        if year is None:
+            year = self.jewish_year
+        date = JewishDate(year, 7, 1)
+        kviah_value = date.cheshvan_kislev_kviah()
+        rosh_hashana_day = date.day_of_week
+        date.jewish_month = 1
+        pesach_day = date.day_of_week
+        return rosh_hashana_day, kviah_value, pesach_day
 
     def molad(self, month: int = None, year: Optional[int] = None) -> 'JewishDate':
         if month is None:

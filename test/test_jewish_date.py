@@ -587,6 +587,26 @@ class TestJewishDate(unittest.TestCase):
         subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
         self.assertEqual(subject.cheshvan_kislev_kviah(), JewishDate.CHESHVAN_KISLEV_KEVIAH.shelaimim)
 
+    def test_kviah(self):
+        kviah = JewishDate.CHESHVAN_KISLEV_KEVIAH
+        years = [(test.test_helper.standard_monday_chaseirim(), (2, kviah.chaseirim, 3)),
+                 (test.test_helper.standard_thursday_kesidran(), (5, kviah.kesidran, 7)),
+                 (test.test_helper.standard_shabbos_shelaimim(), (7, kviah.shelaimim, 3)),
+                 (test.test_helper.leap_thursday_chaseirim(), (5, kviah.chaseirim, 1)),
+                 (test.test_helper.leap_tuesday_kesidran(), (3, kviah.kesidran, 7)),
+                 (test.test_helper.leap_monday_shelaimim(), (2, kviah.shelaimim, 7))]
+        subject = JewishDate()
+        result = map(lambda pair: (pair[0], subject.kviah(pair[0])), years)
+        self.assertEqual(list(result), years)
+
+    def test_kviah_defaults_to_current_year(self):
+        kviah = JewishDate.CHESHVAN_KISLEV_KEVIAH
+        subject = JewishDate()
+        subject.jewish_year = test.test_helper.standard_monday_chaseirim()
+        self.assertEqual(subject.kviah(), (2, kviah.chaseirim, 3))
+        subject.jewish_year = test.test_helper.standard_shabbos_shelaimim()
+        self.assertEqual(subject.kviah(), (7, kviah.shelaimim, 3))
+
     def test_molad(self):
         subject = JewishDate()
         molad = subject.molad(5, 5778)
