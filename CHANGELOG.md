@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 ### Added
-- Limudim support for Parsha, DafYomiBavli, DafYomiYerushalmi
+- Limudim support for: 
+    - Parsha 
+    - DafYomiBavli
+    - DafYomiYerushalmi
+    - DafHashavuaBavli
 - Kviah function for JewishDate
 
 ### Fixed
