@@ -1,9 +1,9 @@
-from datetime import date
 from collections import OrderedDict
+from datetime import date
 
-from zmanim.limudim.limud_calculator import LimudCalculator
 from zmanim.hebrew_calendar.jewish_date import JewishDate
 from zmanim.limudim.cycle import Cycle
+from zmanim.limudim.limud_calculator import LimudCalculator
 
 
 class DafYomiBavli(LimudCalculator):

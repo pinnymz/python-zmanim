@@ -1,7 +1,6 @@
+from datetime import date
 from functools import reduce
 from typing import Optional, Union
-
-from datetime import date
 
 from zmanim.hebrew_calendar.jewish_date import JewishDate
 from zmanim.limudim.anchor import Anchor
