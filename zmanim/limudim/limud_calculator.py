@@ -1,6 +1,8 @@
 from functools import reduce
 from typing import Optional, Union
 
+from datetime import date
+
 from zmanim.hebrew_calendar.jewish_date import JewishDate
 from zmanim.limudim.anchor import Anchor
 from zmanim.limudim.cycle import Cycle
@@ -10,10 +12,10 @@ from zmanim.limudim.unit import Unit
 
 
 class LimudCalculator:
-    def limud(self, date: JewishDate) -> Optional[Limud]:
-        jewish_date = self._jewish_date(date)
+    def limud(self, limud_date: Union[date, JewishDate]) -> Optional[Limud]:
+        jewish_date = self._jewish_date(limud_date)
         cycle = self.find_cycle(jewish_date)
-        if cycle is None or cycle.end_date < date:
+        if cycle is None or cycle.end_date < jewish_date:
             return None
         units = self.cycle_units_calculation(cycle)
         interval = Interval.first_for_cycle(cycle, self.interval_end_calculation)
@@ -43,15 +45,16 @@ class LimudCalculator:
     def is_tiered_units(self) -> bool:
         return True
 
-    # For tiered units, this would be a Hash in the format:
-    #   `{some_name: last_page, ...}`
+    # For tiered units, this would be an OrderedDict in the format:
+    #   `OrderedDict([('some_name', last_page), ...])`
     # or:
-    #   `{maseches: {perek_number => mishnayos, ...}, ...}`.
+    #   `OrderedDict([('maseches', OrderedDict([(perek_number, mishnayos), ...]), ...])`.
     #
     # For simple units, use an Array in the format:
     #   `['some_name', ...]`
-    def default_units(self) -> Union[dict, list]:
-        return {}
+    @staticmethod
+    def default_units() -> Union[dict, list]:
+        return []
 
     # Set if units are applied fractionally (indicated by a fractional unit_step).
     # For example, an amud yomi calculator would set `('a', 'b')`
@@ -60,7 +63,8 @@ class LimudCalculator:
 
     # Change this when using page numbers that do not generally start from one.
     # (e.g. Talmud Bavli pages start from 2)
-    def default_starting_page(self) -> int:
+    @staticmethod
+    def default_starting_page() -> int:
         return 1
 
     def starting_page(self, units: Union[dict, list], unit_name: str) -> int:
@@ -111,19 +115,22 @@ class LimudCalculator:
                 start = self.starting_page(units, name)
                 length = (attributes - start) + 1
 
-                def elem_reducer(o: int, p: list) -> list:
+                def elem_reducer(e: list) -> list:
+                    o, p = e
                     if o <= length:
-                        return [0, p + [name, (start + 0) - 1]]
+                        return [0, p + [name, (start + o) - 1]]
                     return [o - length, p]
 
                 head = [e for e in t if e[0] == 0]
                 tail = list(map(elem_reducer, [e for e in t if e[0] != 0]))
                 return head + tail
             else:
-                def named_elem_reducer(o: int, p: list) -> list:
+                def named_elem_reducer(e: list) -> list:
+                    o, p = e
                     return [o, p + [name]]
 
-                def offset_units_reducer(o: int, p: list) -> list:
+                def offset_units_reducer(e: list) -> list:
+                    o, p = e
                     return [o, p] if o == 0 else [o, p[:-1]]
 
                 head = [e for e in t if e[0] == 0]

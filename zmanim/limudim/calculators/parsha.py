@@ -9,6 +9,63 @@ from zmanim.limudim.limud_calculator import LimudCalculator
 
 
 class Parsha(LimudCalculator):
+    Units = ['bereishis', 'noach', 'lech_lecha', 'vayeira', 'chayei_sarah', 'toldos', 'vayeitzei', 'vayishlach', 'vayeishev', 'mikeitz', 'vayigash', 'vayechi',
+             'shemos', 'vaeirah', 'bo', 'beshalach', 'yisro', 'mishpatim', 'terumah', 'tetzaveh', 'ki_sisa', 'vayakheil', 'pekudei',
+             'vayikra', 'tzav', 'shemini', 'tazria', 'metzora', 'acharei', 'kedoshim', 'emor', 'behar', 'bechukosai',
+             'bamidbar', 'naso', 'behaalosecha', 'shelach', 'korach', 'chukas', 'balak', 'pinchas', 'matos', 'masei',
+             'devarim', 'vaeschanan', 'eikev', 'reei', 'shoftim', 'ki_seitzei', 'ki_savo', 'nitzavim', 'vayeilech', 'haazinu', 'vezos_haberacha']
+
+    Kviah = JewishDate.CHESHVAN_KISLEV_KEVIAH
+    IsraelModifications = {
+                (2, Kviah.chaseirim, 5): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (2, Kviah.shelaimim, 7): [],
+                (3, Kviah.kesidran, 7): [],
+                (5, Kviah.chaseirim, 1): [],
+                (5, Kviah.shelaimim, 3): [['nitzavim', 'vayeilech']],
+                (7, Kviah.chaseirim, 3): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (7, Kviah.shelaimim, 5): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (2, Kviah.chaseirim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (2, Kviah.shelaimim, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (3, Kviah.kesidran, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                         ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (5, Kviah.kesidran, 7): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                         ['matos', 'masei']],
+                (5, Kviah.shelaimim, 1): [['tazria', 'metzora'], ['acharei', 'kedoshim'], ['behar', 'bechukosai'],
+                                          ['matos', 'masei']],
+                (7, Kviah.chaseirim, 1): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei']],
+                (7, Kviah.shelaimim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei']],
+            }
+
+    DiasporaModifications = {
+                (2, Kviah.chaseirim, 5): [['chukas', 'balak'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (2, Kviah.shelaimim, 7): [['matos', 'masei']],
+                (3, Kviah.kesidran, 7): [['matos', 'masei']],
+                (5, Kviah.chaseirim, 1): [],
+                (5, Kviah.shelaimim, 3): [['nitzavim', 'vayeilech']],
+                (7, Kviah.chaseirim, 3): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (7, Kviah.shelaimim, 5): [['chukas', 'balak'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (2, Kviah.chaseirim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+                (2, Kviah.shelaimim, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['chukas', 'balak'], ['matos', 'masei'],
+                                          ['nitzavim', 'vayeilech']],
+                (3, Kviah.kesidran, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                         ['behar', 'bechukosai'], ['chukas', 'balak'], ['matos', 'masei'],
+                                         ['nitzavim', 'vayeilech']],
+                (5, Kviah.kesidran, 7): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                         ['behar', 'bechukosai'], ['matos', 'masei']],
+                (5, Kviah.shelaimim, 1): [['tazria', 'metzora'], ['acharei', 'kedoshim'], ['behar', 'bechukosai'],
+                                          ['matos', 'masei']],
+                (7, Kviah.chaseirim, 1): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei']],
+                (7, Kviah.shelaimim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
+                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
+            }
+
     def __init__(self, in_israel: bool = False):
         self.__in_israel = in_israel
 
@@ -22,12 +79,9 @@ class Parsha(LimudCalculator):
     def perpetual_cycle_anchor(self) -> Anchor:
         return DayOfYearAnchor(7, 23 if self.in_israel else 24)
 
-    def default_units(self) -> list:
-        return ['bereishis', 'noach', 'lech_lecha', 'vayeira', 'chayei_sarah', 'toldos', 'vayeitzei', 'vayishlach', 'vayeishev', 'mikeitz', 'vayigash', 'vayechi',
-                'shemos', 'vaeirah', 'bo', 'beshalach', 'yisro', 'mishpatim', 'terumah', 'tetzaveh', 'ki_sisa', 'vayakheil', 'pekudei',
-                'vayikra', 'tzav', 'shemini', 'tazria', 'metzora', 'acharei', 'kedoshim', 'emor', 'behar', 'bechukosai',
-                'bamidbar', 'naso', 'behaalosecha', 'shelach', 'korach', 'chukas', 'balak', 'pinchas', 'matos', 'masei',
-                'devarim', 'vaeschanan', 'eikev', 'reei', 'shoftim', 'ki_seitzei', 'ki_savo', 'nitzavim', 'vayeilech', 'haazinu', 'vezos_haberacha']
+    @staticmethod
+    def default_units() -> list:
+        return Parsha.Units
 
     def cycle_end_calculation(self, start_date: JewishDate, iteration: Optional[int]) -> JewishDate:
         return self.perpetual_cycle_anchor().next_occurrence(start_date) - 1
@@ -46,61 +100,14 @@ class Parsha(LimudCalculator):
         return cycle.end_date if end_date > cycle.end_date else end_date
 
     def cycle_units_calculation(self, cycle: Cycle) -> list:
-        kviah = JewishDate.CHESHVAN_KISLEV_KEVIAH
         kviah_values = cycle.start_date.kviah()
         if self.in_israel:
-            modifications = {
-                (2, kviah.chaseirim, 5): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (2, kviah.shelaimim, 7): [],
-                (3, kviah.kesidran, 7): [],
-                (5, kviah.chaseirim, 1): [],
-                (5, kviah.shelaimim, 3): [['nitzavim', 'vayeilech']],
-                (7, kviah.chaseirim, 3): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (7, kviah.shelaimim, 5): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (2, kviah.chaseirim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (2, kviah.shelaimim, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (3, kviah.kesidran, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                         ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (5, kviah.kesidran, 7): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                         ['matos', 'masei']],
-                (5, kviah.shelaimim, 1): [['tazria', 'metzora'], ['acharei', 'kedoshim'], ['behar', 'bechukosai'],
-                                          ['matos', 'masei']],
-                (7, kviah.chaseirim, 1): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei']],
-                (7, kviah.shelaimim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei']],
-            }[kviah_values]
+            modifications = Parsha.IsraelModifications[kviah_values]
         else:
-            modifications = {
-                (2, kviah.chaseirim, 5): [['chukas', 'balak'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (2, kviah.shelaimim, 7): [['matos', 'masei']],
-                (3, kviah.kesidran, 7): [['matos', 'masei']],
-                (5, kviah.chaseirim, 1): [],
-                (5, kviah.shelaimim, 3): [['nitzavim', 'vayeilech']],
-                (7, kviah.chaseirim, 3): [['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (7, kviah.shelaimim, 5): [['chukas', 'balak'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (2, kviah.chaseirim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-                (2, kviah.shelaimim, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['chukas', 'balak'], ['matos', 'masei'],
-                                          ['nitzavim', 'vayeilech']],
-                (3, kviah.kesidran, 5): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                         ['behar', 'bechukosai'], ['chukas', 'balak'], ['matos', 'masei'],
-                                         ['nitzavim', 'vayeilech']],
-                (5, kviah.kesidran, 7): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                         ['behar', 'bechukosai'], ['matos', 'masei']],
-                (5, kviah.shelaimim, 1): [['tazria', 'metzora'], ['acharei', 'kedoshim'], ['behar', 'bechukosai'],
-                                          ['matos', 'masei']],
-                (7, kviah.chaseirim, 1): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei']],
-                (7, kviah.shelaimim, 3): [['vayakheil', 'pikudei'], ['tazria', 'metzora'], ['acharei', 'kedoshim'],
-                                          ['behar', 'bechukosai'], ['matos', 'masei'], ['nitzavim', 'vayeilech']],
-            }[kviah_values]
+            modifications = Parsha.DiasporaModifications[kviah_values]
 
         def modification_reducer(transitioned_units, parsha_pair):
             index = transitioned_units.index(parsha_pair[0])
             return transitioned_units[0:index] + [parsha_pair] + transitioned_units[index+2:]
 
-        return reduce(modification_reducer, modifications, self.default_units())
+        return reduce(modification_reducer, modifications, self.default_units().copy())
