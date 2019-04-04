@@ -47,7 +47,7 @@ class LimudCalculator:
     # For tiered units, this would be an OrderedDict in the format:
     #   `OrderedDict([('some_name', last_page), ...])`
     # or:
-    #   `OrderedDict([('maseches', OrderedDict([(perek_number, mishnayos), ...]), ...])`.
+    #   `OrderedDict([('maseches', {perek_number: mishnayos, ...}, ...])`.
     #
     # For simple units, use an Array in the format:
     #   `['some_name', ...]`
