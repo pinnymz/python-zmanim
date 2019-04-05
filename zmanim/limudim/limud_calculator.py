@@ -44,12 +44,12 @@ class LimudCalculator:
     def is_tiered_units(self) -> bool:
         return True
 
-    # For tiered units, this would be an OrderedDict in the format:
-    #   `OrderedDict([('some_name', last_page), ...])`
+    # For tiered units, this would be a dict in the format:
+    #   `{'some_name': last_page, ...}`
     # or:
-    #   `OrderedDict([('maseches', {perek_number: mishnayos, ...}, ...])`.
+    #   `{'maseches': {perek_number: mishnayos, ...}, ...}`.
     #
-    # For simple units, use an Array in the format:
+    # For simple units, use a list in the format:
     #   `['some_name', ...]`
     @staticmethod
     def default_units() -> Union[dict, list]:
@@ -102,9 +102,9 @@ class LimudCalculator:
         else:
             offset2 = None
         offsets = list(filter(None.__ne__, [offset, offset2]))
-        targets = list(map(lambda o: [o, []], offsets))
+        targets = [[o, []] for o in offsets]
         results = self.find_offset_units(units, targets)
-        if set(map(lambda r: r[0], results)) != {0}:
+        if {r[0] for r in results} != {0}:
             return None
         paths = list(map(lambda r: r[1], results))
         return Unit(*paths)
@@ -116,27 +116,13 @@ class LimudCalculator:
                 start = self.starting_page(units, name)
                 length = (attributes - start) + 1
 
-                def elem_reducer(e: list) -> list:
-                    o, p = e
-                    if o <= length:
-                        return [0, p + [name, (start + o) - 1]]
-                    return [o - length, p]
-
                 head = [e for e in t if e[0] == 0]
-                tail = list(map(elem_reducer, [e for e in t if e[0] != 0]))
+                tail = [[0, p + [name, (start + o) - 1]] if o <= length else [o - length, p] for o, p in t if o != 0]
                 return head + tail
             else:
-                def named_elem_reducer(e: list) -> list:
-                    o, p = e
-                    return [o, p + [name]]
-
-                def offset_units_reducer(e: list) -> list:
-                    o, p = e
-                    return [o, p] if o == 0 else [o, p[:-1]]
-
                 head = [e for e in t if e[0] == 0]
-                offset_units = self.find_offset_units(attributes, list(map(named_elem_reducer, [e for e in t if e[0] != 0])))
-                tail = list(map(offset_units_reducer, offset_units))
+                offset_units = self.find_offset_units(attributes, [[o, p + [name]] for o, p in t if o != 0])
+                tail = [[o, p] if o == 0 else [o, p[:-1]] for o, p in offset_units]
                 return head + tail
 
         return list(reduce(unit_reducer, units, targets))

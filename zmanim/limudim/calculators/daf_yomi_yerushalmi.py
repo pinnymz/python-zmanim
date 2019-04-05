@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from datetime import date
 
 from zmanim.hebrew_calendar.jewish_date import JewishDate
@@ -8,11 +7,11 @@ from zmanim.limudim.unit import Unit
 
 
 class DafYomiYerushalmi(LimudCalculator):
-    Units = OrderedDict([('berachos', 68), ('peah', 37), ('demai', 34), ('kilayim', 44), ('shviis', 31), ('terumos', 59), ('maasros', 26), ('maaser_sheni', 33),
-                         ('chalah', 28), ('orlah', 20), ('bikurim', 13), ('shabbos', 92), ('eruvin', 65), ('pesachim', 71), ('beitzah', 22), ('rosh_hashanah', 22),
-                         ('yoma', 42), ('sukkah', 26), ('taanis', 26), ('shekalim', 33), ('megilah', 34), ('chagigah', 22), ('moed_katan', 19), ('yevamos', 85),
-                         ('kesubos', 72), ('sotah', 47), ('nedarim', 40), ('nazir', 47), ('gitin', 54), ('kiddushin', 48), ('bava_kama', 44), ('bava_metzia', 37),
-                         ('bava_basra', 34), ('sanhedrin', 44), ('makos', 9), ('shevuos', 57), ('avodah_zarah', 37), ('horayos', 19), ('niddah', 13)])
+    Units = {'berachos': 68, 'peah': 37, 'demai': 34, 'kilayim': 44, 'shviis': 31, 'terumos': 59, 'maasros': 26, 'maaser_sheni': 33,
+             'chalah': 28, 'orlah': 20, 'bikurim': 13, 'shabbos': 92, 'eruvin': 65, 'pesachim': 71, 'beitzah': 22, 'rosh_hashanah': 22,
+             'yoma': 42, 'sukkah': 26, 'taanis': 26, 'shekalim': 33, 'megilah': 34, 'chagigah': 22, 'moed_katan': 19, 'yevamos': 85,
+             'kesubos': 72, 'sotah': 47, 'nedarim': 40, 'nazir': 47, 'gitin': 54, 'kiddushin': 48, 'bava_kama': 44, 'bava_metzia': 37,
+             'bava_basra': 34, 'sanhedrin': 44, 'makos': 9, 'shevuos': 57, 'avodah_zarah': 37, 'horayos': 19, 'niddah': 13}
 
     def initial_cycle_date(self) -> JewishDate:
         return self._jewish_date(date(1980, 2, 2))
