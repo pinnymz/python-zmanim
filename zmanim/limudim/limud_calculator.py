@@ -83,8 +83,10 @@ class LimudCalculator:
             return self.skip_unit()
         if self.is_tiered_units():
             return self.tiered_units_for_interval(units, interval)
-        unit = units[interval.iteration-1]
-        return Unit(unit) if isinstance(unit, str) else Unit(*unit)
+        if len(units) >= interval.iteration:
+            unit = units[interval.iteration-1]
+            return Unit(unit) if isinstance(unit, str) or not isinstance(unit, (list, tuple)) else Unit(*unit)
+        return None
 
     def skip_unit(self) -> Optional[Unit]:
         return None

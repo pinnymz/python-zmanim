@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - DafYomiYerushalmi
     - DafHashavuaBavli
     - MishnaYomis
+    - PirkeiAvos
     - TehillimMonthly
 - Kviah function for JewishDate
 
