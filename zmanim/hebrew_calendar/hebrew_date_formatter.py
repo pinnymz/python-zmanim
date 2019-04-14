@@ -28,8 +28,18 @@ class HebrewDateFormatter:
         self.use_long_hebrew_years = True
         self.use_geresh_gershayim = True
 
-        if 'hebrew_format' in kwargs:
-            self.hebrew_format = kwargs.pop('hebrew_format')
+        # If one of the above keys is passed along, allow to override the value
+        self.__dict__.update(
+            (key, val) for key, val in kwargs.items() if hasattr(self, key))
+
+        _LOGGER.debug(
+            "Formatter settings:\n"
+            "========================\n"
+            "hebrew_format        =%s\n"
+            "use_long_hebrew_years=%s\n"
+            "use_geresh_gershayim =%s",
+            self.hebrew_format, self.use_long_hebrew_years,
+            self.use_geresh_gershayim)
 
     def format(self, jewish_date: JewishDate) -> str:
         """
