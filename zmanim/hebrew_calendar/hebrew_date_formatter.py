@@ -1,6 +1,11 @@
 """String manipulation module for formatting the Hebrew dates"""
 
+import logging
+
 from .jewish_date import JewishDate
+
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class HebrewDateFormatter:
@@ -145,14 +150,17 @@ class HebrewDateFormatter:
         "אדר ב'" or "ניסן", otherwise it will return "Adar II" or "Nissan".
         """
         month = jewish_date.jewish_month
+
+        _LOGGER.debug("Formatting month %s", JewishDate.MONTHS(month))
+
         if self.hebrew_format:
             if (jewish_date.is_jewish_leap_year() and
-                    JewishDate.MONTHS(month) == 'adar'):
+                    JewishDate.MONTHS(month) == JewishDate.MONTHS.adar):
                 # return Adar I, not Adar in a leap year
                 return (f"{self.HEBREW_MONTHS[13]}"
                         f"{self.GERESH if self.use_geresh_gershayim else ''}")
             elif (jewish_date.is_jewish_leap_year() and
-                    JewishDate.MONTHS(month) == 'adar_ii'):
+                    JewishDate.MONTHS(month) == JewishDate.MONTHS.adar_ii):
                 return (f"{self.HEBREW_MONTHS[12]}"
                         f"{self.GERESH if self.use_geresh_gershayim else ''}")
             else:
@@ -160,7 +168,7 @@ class HebrewDateFormatter:
 
         else:
             if (jewish_date.is_jewish_leap_year() and
-                    JewishDate.MONTHS(month) == 'adar'):
+                    JewishDate.MONTHS(month) == JewishDate.MONTHS.adar):
                 # return Adar I, not Adar in a leap year
                 return self.TRANSLITERATED_MONTHS[13]
             else:
