@@ -15,6 +15,13 @@ class TestHebrewDateFormatter(unittest.TestCase):
             (dt(2019, 3, 1), u"כ\"ד אדר א' ה' תשע\"ט", "24 Adar I, 5779"),
         )
 
+    def omer_tests(self):
+        return (
+            (dt(2019, 4, 29), u"ט' בעומר", "Omer 9"),
+            (dt(2019, 4, 1), u"", ""),
+            (dt(2019, 5, 23), u"ל\"ג בעומר", "Lag BaOmer"),
+        )
+
     def number_tests(self):
         return (
             (0, u"אפס", u"אפס"),
@@ -42,19 +49,36 @@ class TestHebrewDateFormatter(unittest.TestCase):
             self.assertEqual(actual, case[2])
 
     def testFormatNumber(self):
+        """Test numbers formatting with geresh"""
         formatter = HebrewDateFormatter()
         for case in self.number_tests():
             actual = formatter.format_hebrew_number(case[0])
             self.assertEqual(actual, case[1])
 
     def testFormatNumberNoGereshGershayim(self):
+        """Test numbers formatting without geresh"""
         formatter = HebrewDateFormatter(use_geresh_gershayim=False)
         for case in self.number_tests():
             actual = formatter.format_hebrew_number(case[0])
             self.assertEqual(actual, case[2])
 
     def testFormatNumberOutOfBounds(self):
+        """Check for out of bounds number formatting"""
         formatter = HebrewDateFormatter()
         for number in [-1, 10000, 99999]:
             self.assertRaises(
                 ValueError, formatter.format_hebrew_number, number)
+
+    def testFormatOmerHebrew(self):
+        """Test Omer count in Hebrew"""
+        formatter = HebrewDateFormatter(hebrew_format=True)
+        for case in self.omer_tests():
+            actual = formatter.format_omer(JewishCalendar(case[0]))
+            self.assertEqual(actual, case[1])
+
+    def testFormatOmerEnglish(self):
+        """Test Omer count in English"""
+        formatter = HebrewDateFormatter(hebrew_format=False)
+        for case in self.omer_tests():
+            actual = formatter.format_omer(JewishCalendar(case[0]))
+            self.assertEqual(actual, case[2])

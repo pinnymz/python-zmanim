@@ -3,6 +3,7 @@
 import logging
 
 from .jewish_date import JewishDate
+from .jewish_calendar import JewishCalendar
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -27,19 +28,14 @@ class HebrewDateFormatter:
         self.hebrew_format = True
         self.use_long_hebrew_years = True
         self.use_geresh_gershayim = True
+        self.hebrew_omer_prefix = u"ב"
 
         # If one of the above keys is passed along, allow to override the value
         self.__dict__.update(
             (key, val) for key, val in kwargs.items() if hasattr(self, key))
 
-        _LOGGER.debug(
-            "Formatter settings:\n"
-            "========================\n"
-            "hebrew_format        =%s\n"
-            "use_long_hebrew_years=%s\n"
-            "use_geresh_gershayim =%s",
-            self.hebrew_format, self.use_long_hebrew_years,
-            self.use_geresh_gershayim)
+        for key, val in self.__dict__.items():
+            _LOGGER.debug("Formatter settings: %s: %s", key, val)
 
     def format(self, jewish_date: JewishDate) -> str:
         """
@@ -183,3 +179,28 @@ class HebrewDateFormatter:
                 return self.TRANSLITERATED_MONTHS[13]
             else:
                 return self.TRANSLITERATED_MONTHS[month - 1]
+
+    def format_omer(self, jewish_calendar: JewishCalendar) -> str:
+        """
+        Returns a string of the Omer day
+
+        The string is formatted in the form ל"ג בעומר if Hebrew format is set,
+        or "Omer X" or "Lag BaOmer" if not.
+
+        If no Omer is counted, the string is empty.
+
+        By default the value is prefixed by "ב", this can be changed to "ל" by
+        changing the hebrew_omer_prefix class variable.
+        """
+        omer = jewish_calendar.day_of_omer()
+        if omer is None:
+            return ""
+
+        if self.hebrew_format:
+            return (f"{self.format_hebrew_number(omer)} "
+                    f"{self.hebrew_omer_prefix}עומר")
+        else:
+            if omer == 33:  # if lag b'omer
+                return "Lag BaOmer"
+            else:
+                return f"Omer {omer}"
