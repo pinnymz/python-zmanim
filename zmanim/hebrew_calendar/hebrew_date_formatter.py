@@ -24,6 +24,28 @@ class HebrewDateFormatter:
 
     GERSHAYIM = '"'
 
+    HEBREW_HOLIDAYS = [
+        u"", u"ערב פסח", u"פסח", u"חול המועד פסח", u"פסח שני", u"ערב שבועות",
+        u"שבועות", u"שבעה עשר בתמוז", u"תשעה באב", u"ט״ו באב", u"ערב ראש השנה",
+        u"ראש השנה", u"צום גדליה", u"ערב יום כיפור", u"יום כיפור",
+        u"ערב סוכות", u"סוכות", u"חול המועד סוכות", u"הושענא רבה",
+        u"שמיני עצרת", u"שמחת תורה", u"ערב חנוכה", u"חנוכה", u"עשרה בטבת",
+        u"ט״ו בשבט", u"תענית אסתר", u"פורים", u"פורים שושן", u"פורים קטן",
+        u"שושן פורים קטן" u"ראש חודש", u"יום השואה", u"יום הזיכרון",
+        u"יום העצמאות", u"יום ירושלים"
+    ]
+
+    TRANSLITERATED_HOLIDAYS = [
+        "", "Erev Pesach", "Pesach", "Chol Hamoed Pesach", "Pesach Sheni",
+        "Erev Shavuos", "Shavuos", "Seventeenth of Tammuz", "Tishah B'Av",
+        "Tu B'Av", "Erev Rosh Hashana", "Rosh Hashana", "Fast of Gedalyah",
+        "Erev Yom Kippur", "Yom Kippur", "Erev Succos", "Succos",
+        "Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres",
+        "Simchas Torah", "Erev Chanukah", "Chanukah", "Tenth of Teves",
+        "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim",
+        "Purim Katan", "Shushan Purim Katan", "Rosh Chodesh", "Yom HaShoah",
+        "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim"]
+
     def __init__(self, *args, **kwargs):
         self.hebrew_format = True
         self.use_long_hebrew_years = True
@@ -204,3 +226,33 @@ class HebrewDateFormatter:
                 return "Lag BaOmer"
             else:
                 return f"Omer {omer}"
+
+    def format_yom_tov(self, jewish_calendar: JewishCalendar) -> str:
+        """
+        Formats the Yom Tov (holiday) name
+
+        Depndent on hebrew_format, returns the name in Hebrew or transliterated
+        Latin characters.
+        """
+        yom_tov = jewish_calendar.significant_day()
+
+        if yom_tov is None:
+            return ""
+
+        index = jewish_calendar.SIGNIFICANT_DAYS[yom_tov].value
+
+        _LOGGER.debug("Detected Yom Tov: %s (%d)", yom_tov, index)
+
+        if index == JewishCalendar.SIGNIFICANT_DAYS.chanukah.value:
+            day_of_chanukah = jewish_calendar.day_of_chanukah()
+
+            _LOGGER.debug("Day of Chanukah: %d", day_of_chanukah)
+            if self.hebrew_format:
+                return (f"{self.format_hebrew_number(day_of_chanukah)} "
+                        f"{self.HEBREW_HOLIDAYS[index]}")
+            else:
+                return (f"{self.TRANSLITERATED_HOLIDAYS[index]} "
+                        f"{day_of_chanukah}")
+
+        return (self.HEBREW_HOLIDAYS[index] if self.hebrew_format else
+                self.TRANSLITERATED_HOLIDAYS[index])

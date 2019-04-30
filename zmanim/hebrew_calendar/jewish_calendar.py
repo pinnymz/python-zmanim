@@ -9,13 +9,17 @@ from zmanim.util.geo_location import GeoLocation
 
 
 class JewishCalendar(JewishDate):
-    SIGNIFICANT_DAYS = Enum('SignificantDays', 'erev_rosh_hashana rosh_hashana tzom_gedalyah erev_yom_kippur yom_kippur \
-                                                erev_succos succos chol_hamoed_succos hoshana_rabbah shemini_atzeres simchas_torah \
-                                                chanukah tenth_of_teves tu_beshvat \
-                                                taanis_esther purim shushan_purim purim_katan shushan_purim_katan \
-                                                erev_pesach pesach chol_hamoed_pesach pesach_sheni erev_shavuos shavuos \
-                                                seventeen_of_tammuz tisha_beav tu_beav \
-                                                yom_hashoah yom_hazikaron yom_haatzmaut yom_yerushalayim')
+    SIGNIFICANT_DAYS = Enum(
+        'SignificantDays', 'erev_pesach pesach chol_hamoed_pesach pesach_sheni \
+                            erev_shavuos shavuos seventeen_of_tammuz \
+                            tisha_beav tu_beav erev_rosh_hashana rosh_hashana \
+                            tzom_gedalyah erev_yom_kippur yom_kippur \
+                            erev_succos succos chol_hamoed_succos \
+                            hoshana_rabbah shemini_atzeres simchas_torah \
+                            erev_chanukah chanukah tenth_of_teves tu_beshvat \
+                            taanis_esther purim shushan_purim purim_katan \
+                            shushan_purim_katan rosh_chodesh yom_hashoah \
+                            yom_hazikaron yom_haatzmaut yom_yerushalayim')
 
     def __init__(self, *args, **kwargs):
         in_israel = None
