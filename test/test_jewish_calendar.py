@@ -33,7 +33,7 @@ class TestJewishCalendar(unittest.TestCase):
     def leap_purim(self):
         return {'purim_katan': ['12-14'],
                 'shushan_purim_katan': ['12-15'],
-                'taanis_esther': ['13-13'],
+                'fast_of_esther': ['13-13'],
                 'purim': ['13-14'],
                 'shushan_purim': ['13-15']}
 
@@ -50,7 +50,7 @@ class TestJewishCalendar(unittest.TestCase):
             'tu_beav': ['5-15'],
             'erev_rosh_hashana': ['6-29'],
             'rosh_hashana': ['7-1', '7-2'],
-            'tzom_gedalyah': ['7-3'],
+            'fast_of_gedalyah': ['7-3'],
             'erev_yom_kippur': ['7-9'],
             'yom_kippur': ['7-10'],
             'erev_succos': ['7-14'],
@@ -62,7 +62,7 @@ class TestJewishCalendar(unittest.TestCase):
             'chanukah': ['9-25', '9-26', '9-27', '9-28', '9-29', '9-30', '10-1', '10-2'],
             'tenth_of_teves': ['10-10'],
             'tu_beshvat': ['11-15'],
-            'taanis_esther': ['12-13'],
+            'fast_of_esther': ['12-13'],
             'purim': ['12-14'],
             'shushan_purim': ['12-15']
         }
@@ -112,13 +112,13 @@ class TestJewishCalendar(unittest.TestCase):
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.standard_significant_days(),
                     'chanukah': self.chanukah_for_chaseirim(),
-                    'taanis_esther': ['12-11']}
+                    'fast_of_esther': ['12-11']}
         self.assertEqual(result, expected)
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_standard_significant_days(),
                     'chanukah': self.chanukah_for_chaseirim(),
-                    'taanis_esther': ['12-11']}
+                    'fast_of_esther': ['12-11']}
         self.assertEqual(israel_result, expected)
 
     def test_significant_days_for_standard_monday_shelaimim(self):
@@ -148,7 +148,7 @@ class TestJewishCalendar(unittest.TestCase):
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.standard_significant_days(),
-                    'tzom_gedalyah': ['7-4'],
+                    'fast_of_gedalyah': ['7-4'],
                     'seventeen_of_tammuz': ['4-18'],
                     'tisha_beav': ['5-10']
                     }
@@ -156,7 +156,7 @@ class TestJewishCalendar(unittest.TestCase):
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_standard_significant_days(),
-                    'tzom_gedalyah': ['7-4'],
+                    'fast_of_gedalyah': ['7-4'],
                     'seventeen_of_tammuz': ['4-18'],
                     'tisha_beav': ['5-10']
                     }
@@ -167,13 +167,13 @@ class TestJewishCalendar(unittest.TestCase):
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.standard_significant_days(),
-                    'tzom_gedalyah': ['7-4']
+                    'fast_of_gedalyah': ['7-4']
                     }
         self.assertEqual(result, expected)
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_standard_significant_days(),
-                    'tzom_gedalyah': ['7-4']
+                    'fast_of_gedalyah': ['7-4']
                     }
         self.assertEqual(israel_result, expected)
 
@@ -197,13 +197,13 @@ class TestJewishCalendar(unittest.TestCase):
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.standard_significant_days(),
-                    'taanis_esther': ['12-11']
+                    'fast_of_esther': ['12-11']
                     }
         self.assertEqual(result, expected)
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_standard_significant_days(),
-                    'taanis_esther': ['12-11']
+                    'fast_of_esther': ['12-11']
                     }
         self.assertEqual(israel_result, expected)
 
@@ -261,14 +261,14 @@ class TestJewishCalendar(unittest.TestCase):
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.leap_significant_days(),
-                    'tzom_gedalyah': ['7-4'],
+                    'fast_of_gedalyah': ['7-4'],
                     'chanukah': self.chanukah_for_chaseirim()
                     }
         self.assertEqual(result, expected)
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_leap_significant_days(),
-                    'tzom_gedalyah': ['7-4'],
+                    'fast_of_gedalyah': ['7-4'],
                     'chanukah': self.chanukah_for_chaseirim()
                     }
         self.assertEqual(israel_result, expected)
@@ -278,15 +278,15 @@ class TestJewishCalendar(unittest.TestCase):
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.leap_significant_days(),
-                    'tzom_gedalyah': ['7-4'],
-                    'taanis_esther': ['13-11']
+                    'fast_of_gedalyah': ['7-4'],
+                    'fast_of_esther': ['13-11']
                     }
         self.assertEqual(result, expected)
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_leap_significant_days(),
-                    'tzom_gedalyah': ['7-4'],
-                    'taanis_esther': ['13-11']
+                    'fast_of_gedalyah': ['7-4'],
+                    'fast_of_esther': ['13-11']
                     }
         self.assertEqual(israel_result, expected)
 
@@ -296,14 +296,14 @@ class TestJewishCalendar(unittest.TestCase):
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_day())
         expected = {**self.leap_significant_days(),
                     'chanukah': self.chanukah_for_chaseirim(),
-                    'taanis_esther': ['13-11']
+                    'fast_of_esther': ['13-11']
                     }
         self.assertEqual(result, expected)
 
         israel_result = test.test_helper.all_days_matching(year, lambda c: c.significant_day(), in_israel=True)
         expected = {**self.israel_leap_significant_days(),
                     'chanukah': self.chanukah_for_chaseirim(),
-                    'taanis_esther': ['13-11']
+                    'fast_of_esther': ['13-11']
                     }
         self.assertEqual(israel_result, expected)
 
