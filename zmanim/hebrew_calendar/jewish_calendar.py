@@ -165,7 +165,7 @@ class JewishCalendar(JewishDate):
             return 'erev_pesach'
         elif self.jewish_day in pesach:
             return 'pesach'
-        elif self.jewish_day in range(16,21):
+        elif self.jewish_day in range(16, 21):
             return 'chol_hamoed_pesach'
         elif self.use_modern_holidays:
             if (self.jewish_day == 26 and self.day_of_week == 5) \
@@ -177,8 +177,10 @@ class JewishCalendar(JewishDate):
         if self.jewish_day == 14:
             return 'pesach_sheni'
         elif self.use_modern_holidays:
-            # Note that this logic follows the current rules, which were last revised in 5764.
-            # The calculations for years prior may not reflect the actual dates observed at that time.
+            # Note that this logic follows the current rules, which were last
+            # revised in 5764.
+            # The calculations for years prior may not reflect the actual dates
+            # observed at that time.
             if (self.jewish_day in [2, 3] and self.day_of_week == 4) \
                     or (self.jewish_day == 4 and self.day_of_week == 3) \
                     or (self.jewish_day == 5 and self.day_of_week == 2):
@@ -234,7 +236,7 @@ class JewishCalendar(JewishDate):
             return 'erev_succos'
         elif self.jewish_day in succos:
             return 'succos'
-        elif self.jewish_day in range(16,21):
+        elif self.jewish_day in range(16, 21):
             return 'chol_hamoed_succos'
         elif self.jewish_day == 21:
             return 'hoshana_rabbah'
@@ -251,7 +253,7 @@ class JewishCalendar(JewishDate):
             return 'chanukah'
 
     def _teves_significant_day(self) -> Optional[str]:
-        chanukah = [1,2]
+        chanukah = [1, 2]
         if self.is_kislev_short():
             chanukah += [3]
 
