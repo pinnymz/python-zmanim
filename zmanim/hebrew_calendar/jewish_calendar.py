@@ -9,13 +9,17 @@ from zmanim.util.geo_location import GeoLocation
 
 
 class JewishCalendar(JewishDate):
-    SIGNIFICANT_DAYS = Enum('SignificantDays', 'erev_rosh_hashana rosh_hashana tzom_gedalyah erev_yom_kippur yom_kippur \
-                                                erev_succos succos chol_hamoed_succos hoshana_rabbah shemini_atzeres simchas_torah \
-                                                chanukah tenth_of_teves tu_beshvat \
-                                                taanis_esther purim shushan_purim purim_katan shushan_purim_katan \
-                                                erev_pesach pesach chol_hamoed_pesach pesach_sheni erev_shavuos shavuos \
-                                                seventeen_of_tammuz tisha_beav tu_beav \
-                                                yom_hashoah yom_hazikaron yom_haatzmaut yom_yerushalayim')
+    SIGNIFICANT_DAYS = Enum(
+        'SignificantDays', 'erev_pesach pesach chol_hamoed_pesach pesach_sheni \
+                            erev_shavuos shavuos seventeen_of_tammuz \
+                            tisha_beav tu_beav erev_rosh_hashana rosh_hashana \
+                            fast_of_gedalyah erev_yom_kippur yom_kippur \
+                            erev_succos succos chol_hamoed_succos \
+                            hoshana_rabbah shemini_atzeres simchas_torah \
+                            erev_chanukah chanukah tenth_of_teves tu_beshvat \
+                            fast_of_esther purim shushan_purim purim_katan \
+                            shushan_purim_katan rosh_chodesh yom_hashoah \
+                            yom_hazikaron yom_haatzmaut yom_yerushalayim')
 
     def __init__(self, *args, **kwargs):
         in_israel = None
@@ -86,8 +90,9 @@ class JewishCalendar(JewishDate):
         return sd is not None and (sd.startswith('chol_hamoed_') or sd == 'hoshana_rabbah')
 
     def is_taanis(self) -> bool:
-        return self.significant_day() in ['seventeen_of_tammuz', 'tisha_beav', 'tzom_gedalyah',
-                                          'yom_kippur', 'tenth_of_teves', 'taanis_esther']
+        return self.significant_day() in [
+            'seventeen_of_tammuz', 'tisha_beav', 'fast_of_gedalyah',
+            'yom_kippur', 'tenth_of_teves', 'fast_of_esther']
 
     def is_rosh_chodesh(self) -> bool:
         return self.jewish_day == 30 or (self.jewish_day == 1 and self.jewish_month != 7)
@@ -160,7 +165,7 @@ class JewishCalendar(JewishDate):
             return 'erev_pesach'
         elif self.jewish_day in pesach:
             return 'pesach'
-        elif self.jewish_day in range(16,21):
+        elif self.jewish_day in range(16, 21):
             return 'chol_hamoed_pesach'
         elif self.use_modern_holidays:
             if (self.jewish_day == 26 and self.day_of_week == 5) \
@@ -172,8 +177,10 @@ class JewishCalendar(JewishDate):
         if self.jewish_day == 14:
             return 'pesach_sheni'
         elif self.use_modern_holidays:
-            # Note that this logic follows the current rules, which were last revised in 5764.
-            # The calculations for years prior may not reflect the actual dates observed at that time.
+            # Note that this logic follows the current rules, which were last
+            # revised in 5764.
+            # The calculations for years prior may not reflect the actual dates
+            # observed at that time.
             if (self.jewish_day in [2, 3] and self.day_of_week == 4) \
                     or (self.jewish_day == 4 and self.day_of_week == 3) \
                     or (self.jewish_day == 5 and self.day_of_week == 2):
@@ -220,7 +227,7 @@ class JewishCalendar(JewishDate):
             return 'rosh_hashana'
         elif (self.jewish_day == 3 and self.day_of_week != 7) \
                 or (self.jewish_day == 4 and self.day_of_week == 1):
-            return 'tzom_gedalyah'
+            return 'fast_of_gedalyah'
         elif self.jewish_day == 9:
             return 'erev_yom_kippur'
         elif self.jewish_day == 10:
@@ -229,7 +236,7 @@ class JewishCalendar(JewishDate):
             return 'erev_succos'
         elif self.jewish_day in succos:
             return 'succos'
-        elif self.jewish_day in range(16,21):
+        elif self.jewish_day in range(16, 21):
             return 'chol_hamoed_succos'
         elif self.jewish_day == 21:
             return 'hoshana_rabbah'
@@ -246,7 +253,7 @@ class JewishCalendar(JewishDate):
             return 'chanukah'
 
     def _teves_significant_day(self) -> Optional[str]:
-        chanukah = [1,2]
+        chanukah = [1, 2]
         if self.is_kislev_short():
             chanukah += [3]
 
@@ -274,7 +281,7 @@ class JewishCalendar(JewishDate):
     def _purim_significant_day(self) -> Optional[str]:
         if (self.jewish_day == 13 and self.day_of_week != 7) \
                 or (self.jewish_day == 11 and self.day_of_week == 5):
-            return 'taanis_esther'
+            return 'fast_of_esther'
         elif self.jewish_day == 14:
             return 'purim'
         elif self.jewish_day == 15:
