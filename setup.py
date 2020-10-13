@@ -20,6 +20,6 @@ setuptools.setup(
         "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
         "Operating System :: OS Independent",
     ],
-    install_requires=['python-dateutil', 'julian'],
+    install_requires=['python-dateutil', 'julian', 'memoization'],
     python_requires='>=3.6'
 )

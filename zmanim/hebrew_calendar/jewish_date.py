@@ -1,11 +1,13 @@
 import copy
 from datetime import date, timedelta
 from enum import Enum
+from memoization import cached
 from typing import Optional
 
 
 class JewishDate:
     MONTHS = Enum('Months', 'nissan iyar sivan tammuz av elul tishrei cheshvan kislev teves shevat adar adar_ii')
+    MONTHS_LIST = list(MONTHS)
 
     RD = date(1, 1, 1)
     JEWISH_EPOCH = -1373429
@@ -300,7 +302,7 @@ class JewishDate:
     def months_in_jewish_year(self, year: Optional[int] = None) -> int:
         if year is None:
             year = self.jewish_year
-        return 13 if self.is_jewish_leap_year(year) else 12
+        return self._months_in_jewish_year(year)
 
     # Returns the list of jewish months for a given jewish year in chronological order
     #   sorted_months_in_jewish_year(5779)
@@ -308,7 +310,7 @@ class JewishDate:
     def sorted_months_in_jewish_year(self, year: Optional[int] = None) -> list:
         if year is None:
             year = self.jewish_year
-        return sorted(range(1, self.months_in_jewish_year(year) + 1), key=lambda y: (0 if y >= 7 else 1, y))
+        return self._sorted_months_in_jewish_year(year)
 
     # Returns the number of days in each jewish month for a given jewish year in chronological order
     #   sorted_days_in_jewish_year(5779)
@@ -316,12 +318,12 @@ class JewishDate:
     def sorted_days_in_jewish_year(self, year: Optional[int] = None) -> list:
         if year is None:
             year = self.jewish_year
-        return list(map(lambda month: (month, self.days_in_jewish_month(month, year)), self.sorted_months_in_jewish_year(year)))
+        return self._sorted_days_in_jewish_year(year)
 
     def days_in_jewish_year(self, year: Optional[int] = None) -> int:
         if year is None:
             year = self.jewish_year
-        return self._jewish_calendar_elapsed_days(year + 1) - self._jewish_calendar_elapsed_days(year)
+        return self._days_in_jewish_year(year)
 
     def days_in_jewish_month(self, month: Optional[int] = None, year: Optional[int] = None) -> int:
         if month is None:
@@ -330,13 +332,7 @@ class JewishDate:
             year = self.jewish_year
         if month < 1 or month > self.months_in_jewish_year(year):
             raise ValueError("invalid month number")
-        m = self.jewish_month_name(month)
-        if (m in ('iyar', 'tammuz', 'elul', 'teves', 'adar_ii')) or \
-                (m == 'cheshvan' and self.is_cheshvan_short(year)) or \
-                (m == 'kislev' and self.is_kislev_short(year)) or \
-                (m == 'adar' and not self.is_jewish_leap_year(year)):
-            return 29
-        return 30
+        return self._days_in_jewish_month(month, year)
 
     def day_number_of_jewish_year(self, year: Optional[int] = None, month: Optional[int] = None, day: Optional[int] = None) -> int:
         if year is None:
@@ -352,7 +348,7 @@ class JewishDate:
     def is_cheshvan_long(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.jewish_year
-        return self.days_in_jewish_year(year) % 10 == 5
+        return self._is_cheshvan_long(year)
 
     def is_cheshvan_short(self, year: Optional[int] = None) -> bool:
         return not self.is_cheshvan_long(year)
@@ -363,12 +359,12 @@ class JewishDate:
     def is_kislev_short(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.jewish_year
-        return self.days_in_jewish_year(year) % 10 == 3
+        return self._is_kislev_short(year)
 
     def is_jewish_leap_year(self, year: Optional[int] = None) -> bool:
         if year is None:
             year = self.jewish_year
-        return ((7 * year) + 1) % 19 < 7
+        return self._is_jewish_leap_year(year)
 
     def cheshvan_kislev_kviah(self, year: Optional[int] = None) -> str:
         if year is None:
@@ -396,7 +392,7 @@ class JewishDate:
     def jewish_month_name(self, month: Optional[int] = None) -> str:
         if month is None:
             month = self.jewish_month
-        return list(self.MONTHS)[month - 1].name
+        return self._jewish_month_name(month)
 
     def jewish_month_from_name(self, month_name: str) -> int:
         return next(m.value for m in self.MONTHS if m.name == month_name)
@@ -415,46 +411,6 @@ class JewishDate:
         minutes, chalakim = divmod(remainder, self.CHALAKIM_PER_MINUTE)
         self.__molad_minutes = minutes
         self.__molad_chalakim = chalakim
-
-    def _chalakim_since_molad_tohu(self, year: Optional[int] = None, month: Optional[int] = None) -> int:
-        if year is None:
-            year = self.jewish_year
-        if month is None:
-            month = self.jewish_month
-        prev_year = year - 1
-        months = self._month_number_from_tishrei(year, month) - 1
-        cycles, remainder = divmod(prev_year, 19)
-        months += int(235 * cycles) + \
-            int(12 * remainder) + \
-            int(((7 * remainder) + 1) / 19)
-
-        return self.CHALAKIM_MOLAD_TOHU + (self.CHALAKIM_PER_MONTH * months)
-
-    def _month_number_from_tishrei(self, year: int, month: int) -> int:
-      leap = self.is_jewish_leap_year(year)
-      return 1 + ((month + (6 if leap else 5)) % (13 if leap else 12))
-
-    def _jewish_calendar_elapsed_days(self, year: int) -> int:
-        days, remainder = self._molad_components_for_year(year)
-        return days + self._dechiyos_count(year, days, remainder)
-
-    def _molad_components_for_year(self, year: int) -> (int, int):
-        chalakim = self._chalakim_since_molad_tohu(year, 7)  # chalakim up to tishrei of given year
-        days, remainder = divmod(chalakim, self.CHALAKIM_PER_DAY)
-        return int(days), int(remainder)
-
-    def _dechiyos_count(self, year: int, days: int, remainder: int) -> int:
-        count = 0
-        # 'days' is Monday-based due to start of Molad at BaHaRaD
-        # add 1 to convert to Sunday-based, '0' represents Shabbos
-        rosh_hashana_day = (days + 1) % 7
-        if (remainder >= 19440) or \
-            ((rosh_hashana_day == 3) and (remainder >= 9924) and not self.is_jewish_leap_year(year)) or \
-            ((rosh_hashana_day == 2) and (remainder >= 16789) and self.is_jewish_leap_year(year-1)):
-            count = 1
-        if ((rosh_hashana_day + count) % 7) in [1, 4, 6]:
-            count += 1
-        return count
 
     def _jewish_year_start_to_abs_date(self, year: int) -> int:
         return self._jewish_calendar_elapsed_days(year) + self.JEWISH_EPOCH + 1
@@ -492,3 +448,91 @@ class JewishDate:
 
     def _reset_day_of_week(self):
         self.__day_of_week = (self.gregorian_date.isoweekday() % 7) + 1
+
+    @staticmethod
+    def _jewish_month_name(month: int) -> str:
+        return JewishDate.MONTHS_LIST[month - 1].name
+
+    @staticmethod
+    def _is_jewish_leap_year(year: int) -> bool:
+        return ((7 * year) + 1) % 19 < 7
+
+    @staticmethod
+    def _is_cheshvan_long(year: int) -> bool:
+        return JewishDate._days_in_jewish_year(year) % 10 == 5
+
+    @staticmethod
+    def _is_kislev_short(year: int) -> bool:
+        return JewishDate._days_in_jewish_year(year) % 10 == 3
+
+    @staticmethod
+    def _months_in_jewish_year(year: int) -> int:
+        return 13 if JewishDate._is_jewish_leap_year(year) else 12
+
+    @staticmethod
+    @cached(ttl=30)
+    def _days_in_jewish_month(month: int, year: int) -> int:
+        m = JewishDate._jewish_month_name(month)
+        if (m in ('iyar', 'tammuz', 'elul', 'teves', 'adar_ii')) or \
+                (m == 'cheshvan' and not JewishDate._is_cheshvan_long(year)) or \
+                (m == 'kislev' and JewishDate._is_kislev_short(year)) or \
+                (m == 'adar' and not JewishDate._is_jewish_leap_year(year)):
+            return 29
+        return 30
+
+    @staticmethod
+    @cached(ttl=30)
+    def _days_in_jewish_year(year: int) -> int:
+        return JewishDate._jewish_calendar_elapsed_days(year + 1) - JewishDate._jewish_calendar_elapsed_days(year)
+
+    @staticmethod
+    @cached(ttl=30)
+    def _sorted_months_in_jewish_year(year: int) -> list:
+        return sorted(range(1, JewishDate._months_in_jewish_year(year) + 1), key=lambda y: (0 if y >= 7 else 1, y))
+
+    @staticmethod
+    @cached(ttl=30)
+    def _sorted_days_in_jewish_year(year: int) -> list:
+        return list(map(lambda month: (month, JewishDate._days_in_jewish_month(month, year)),
+                        JewishDate._sorted_months_in_jewish_year(year)))
+
+    @staticmethod
+    def _jewish_calendar_elapsed_days(year: int) -> int:
+        days, remainder = JewishDate._molad_components_for_year(year)
+        return days + JewishDate._dechiyos_count(year, days, remainder)
+
+    @staticmethod
+    def _dechiyos_count(year: int, days: int, remainder: int) -> int:
+        count = 0
+        # 'days' is Monday-based due to start of Molad at BaHaRaD
+        # add 1 to convert to Sunday-based, '0' represents Shabbos
+        rosh_hashana_day = (days + 1) % 7
+        if (remainder >= 19440) or \
+            ((rosh_hashana_day == 3) and (remainder >= 9924) and not JewishDate._is_jewish_leap_year(year)) or \
+            ((rosh_hashana_day == 2) and (remainder >= 16789) and JewishDate._is_jewish_leap_year(year-1)):
+            count = 1
+        if ((rosh_hashana_day + count) % 7) in [1, 4, 6]:
+            count += 1
+        return count
+
+    @staticmethod
+    def _molad_components_for_year(year: int) -> (int, int):
+        chalakim = JewishDate._chalakim_since_molad_tohu(year, 7)  # chalakim up to tishrei of given year
+        days, remainder = divmod(chalakim, JewishDate.CHALAKIM_PER_DAY)
+        return int(days), int(remainder)
+
+    @staticmethod
+    def _chalakim_since_molad_tohu(year: int, month: int) -> int:
+        prev_year = year - 1
+        months = JewishDate._month_number_from_tishrei(year, month) - 1
+        cycles, remainder = divmod(prev_year, 19)
+        months += int(235 * cycles) + \
+            int(12 * remainder) + \
+            int(((7 * remainder) + 1) / 19)
+
+        return JewishDate.CHALAKIM_MOLAD_TOHU + (JewishDate.CHALAKIM_PER_MONTH * months)
+
+    @staticmethod
+    def _month_number_from_tishrei(year: int, month: int) -> int:
+      leap = JewishDate._is_jewish_leap_year(year)
+      return 1 + ((month + (6 if leap else 5)) % (13 if leap else 12))

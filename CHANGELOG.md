@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - PirkeiAvos
     - TehillimMonthly
 - Kviah function for JewishDate
+- Memoization for some expensive JewishDate calls
 
 ### Fixed
 - Support for python-dateutil pre-2.7.0

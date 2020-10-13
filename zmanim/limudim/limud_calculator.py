@@ -135,5 +135,6 @@ class LimudCalculator:
         else:
             raise NotImplementedError
 
-    def _jewish_date(self, date):
+    @staticmethod
+    def _jewish_date(date):
         return date if isinstance(date, JewishDate) else JewishDate(date)
