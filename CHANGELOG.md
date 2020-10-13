@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Support for python-dateutil pre-2.7.0
+- Added Lag B'Omer as significant day / yom tov
 
 ## [0.2.1] - 2018-01-09
 ### Fixed

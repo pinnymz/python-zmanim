@@ -43,6 +43,7 @@ class TestJewishCalendar(unittest.TestCase):
             'pesach': ['1-15', '1-16', '1-21', '1-22'],
             'chol_hamoed_pesach': ['1-17', '1-18', '1-19', '1-20'],
             'pesach_sheni': ['2-14'],
+            'lag_baomer': ['2-18'],
             'erev_shavuos': ['3-5'],
             'shavuos': ['3-6', '3-7'],
             'seventeen_of_tammuz': ['4-17'],
@@ -376,7 +377,7 @@ class TestJewishCalendar(unittest.TestCase):
                     '9-25', '9-26', '9-27', '9-28', '9-29', '9-30', '10-1', '10-2',
                     '11-15', '12-14', '12-15', '13-14', '13-15',
                     '1-15', '1-16', '1-17', '1-18', '1-19', '1-20', '1-21', '1-22',
-                    '2-14', '3-6', '3-7', '5-15']
+                    '2-14', '2-18', '3-6', '3-7', '5-15']
         self.assertEqual(all_days, expected)
 
     def test_is_yom_tov_in_israel(self):
@@ -389,7 +390,7 @@ class TestJewishCalendar(unittest.TestCase):
                     '9-25', '9-26', '9-27', '9-28', '9-29', '9-30', '10-1', '10-2',
                     '11-15', '12-14', '12-15', '13-14', '13-15',
                     '1-15', '1-16', '1-17', '1-18', '1-19', '1-20', '1-21',
-                    '2-14', '3-6', '5-15']
+                    '2-14', '2-18', '3-6', '5-15']
         self.assertEqual(all_days, expected)
 
     def test_is_yom_tov_with_modern_holidays(self):

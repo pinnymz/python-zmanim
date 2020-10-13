@@ -13,7 +13,7 @@ class JewishCalendar(JewishDate):
                                                 erev_succos succos chol_hamoed_succos hoshana_rabbah shemini_atzeres simchas_torah \
                                                 chanukah tenth_of_teves tu_beshvat \
                                                 taanis_esther purim shushan_purim purim_katan shushan_purim_katan \
-                                                erev_pesach pesach chol_hamoed_pesach pesach_sheni erev_shavuos shavuos \
+                                                erev_pesach pesach chol_hamoed_pesach pesach_sheni lag_baomer erev_shavuos shavuos \
                                                 seventeen_of_tammuz tisha_beav tu_beav \
                                                 yom_hashoah yom_hazikaron yom_haatzmaut yom_yerushalayim')
 
@@ -171,6 +171,8 @@ class JewishCalendar(JewishDate):
     def _iyar_significant_day(self) -> Optional[str]:
         if self.jewish_day == 14:
             return 'pesach_sheni'
+        elif self.jewish_day == 18:
+            return 'lag_baomer'
         elif self.use_modern_holidays:
             # Note that this logic follows the current rules, which were last revised in 5764.
             # The calculations for years prior may not reflect the actual dates observed at that time.
