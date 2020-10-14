@@ -10,6 +10,11 @@ class Cycle:
         self.__end_date = end_date
         self.__iteration = iteration
 
+    def __repr__(self):
+        return "%s(start_date=%r, end_date=%r, iteration=%r)" % \
+               (self.__module__ + "." + self.__class__.__qualname__,
+                self.start_date, self.end_date, self.iteration)
+
     @property
     def start_date(self) -> JewishDate:
         return self.__start_date

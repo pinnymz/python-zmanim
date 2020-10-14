@@ -5,6 +5,11 @@ class Unit:
     def __init__(self, *components):
         self.__components = components
 
+    def __repr__(self):
+        return "%s(components=%r)" % \
+               (self.__module__ + "." + self.__class__.__qualname__,
+                self.components)
+
     @property
     def components(self) -> tuple:
         return self.__components

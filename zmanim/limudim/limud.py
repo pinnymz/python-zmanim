@@ -11,6 +11,11 @@ class Limud:
         self.__interval = interval
         self.__unit = unit
 
+    def __repr__(self):
+        return "%s(interval=%r, unit=%r)" % \
+               (self.__module__ + "." + self.__class__.__qualname__,
+                self.interval, self.unit)
+
     @property
     def interval(self) -> Interval:
         return self.__interval
