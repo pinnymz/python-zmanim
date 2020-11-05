@@ -209,7 +209,7 @@ class JewishDate:
         while d <= 0:
             m -= 1
             if m == 0:
-                m = days_of_year.length
+                m = len(days_of_year)
             if m == 6:
                 y -= 1
                 days_of_year = self.sorted_days_in_jewish_year(y)

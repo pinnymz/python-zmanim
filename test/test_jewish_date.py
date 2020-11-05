@@ -187,6 +187,13 @@ class TestJewishDate(unittest.TestCase):
         self.assertEqual(subject.gregorian_date, initial_gregorian + timedelta(days=5))
         self.assertEqual(subject.jewish_date, (5779, 7, 4))
 
+    def test_forward_with_an_increment_into_first_jewish_month(self):
+        subject = JewishDate(5779, 13, 29)
+        initial_gregorian = subject.gregorian_date
+        subject.forward(5)
+        self.assertEqual(subject.gregorian_date, initial_gregorian + timedelta(days=5))
+        self.assertEqual(subject.jewish_date, (5779, 1, 5))
+
     def test_forward_with_a_large_increment(self):
         subject = JewishDate(5778, 6, 28)
         initial_gregorian = subject.gregorian_date
@@ -221,6 +228,13 @@ class TestJewishDate(unittest.TestCase):
         subject.back(5)
         self.assertEqual(subject.gregorian_date, initial_gregorian - timedelta(days=5))
         self.assertEqual(subject.jewish_date, (5778, 6, 28))
+
+    def test_back_with_a_decrement_into_last_jewish_month(self):
+        subject = JewishDate(5779, 1, 1)
+        initial_gregorian = subject.gregorian_date
+        subject.back(5)
+        self.assertEqual(subject.gregorian_date, initial_gregorian - timedelta(days=5))
+        self.assertEqual(subject.jewish_date, (5779, 13, 25))
 
     def test_back_with_a_large_decrement(self):
         subject = JewishDate(5779, 7, 4)

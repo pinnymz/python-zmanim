@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - repr() content for limudim structures
 
+### Fixed
+- Bug in `jewish_date.back()` failed when wrapping around first Jewish month
+
 ## [0.3.0] - 2020-10-13
 ### Added
 - Limudim support for: 
