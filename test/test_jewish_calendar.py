@@ -582,6 +582,22 @@ class TestJewishCalendar(unittest.TestCase):
         expected = ['7-3', '7-10', '10-10', '13-13', '4-17', '5-9']
         self.assertEqual(all_days, expected)
 
+    def test_is_taanis_bechorim(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_taanis_bechorim()).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+        expected = ['1-14']
+        self.assertEqual(all_days, expected)
+
+    def test_is_taanis_bechorim_for_nonstandard_year(self):
+        year = test.test_helper.standard_shabbos_chaseirim()  # 1-14 is Shabbos
+
+        all_days = test.test_helper.all_days_matching(year, lambda c: c.is_taanis_bechorim()).values()
+        all_days = [item for sublist in all_days for item in sublist]  # flatten
+        expected = ['1-12']
+        self.assertEqual(all_days, expected)
+
     def test_is_rosh_chodesh(self):
         year = test.test_helper.leap_shabbos_shelaimim()
 

@@ -89,6 +89,10 @@ class JewishCalendar(JewishDate):
         return self.significant_day() in ['seventeen_of_tammuz', 'tisha_beav', 'tzom_gedalyah',
                                           'yom_kippur', 'tenth_of_teves', 'taanis_esther']
 
+    def is_taanis_bechorim(self) -> bool:
+        return ((self.day_of_week != 7 and self.jewish_day == 14 and self.jewish_month == 1) or
+                (self.day_of_week == 5 and self.jewish_day == 12 and self.jewish_month == 1))
+
     def is_rosh_chodesh(self) -> bool:
         return self.jewish_day == 30 or (self.jewish_day == 1 and self.jewish_month != 7)
 
