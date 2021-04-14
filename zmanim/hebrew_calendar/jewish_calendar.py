@@ -93,6 +93,9 @@ class JewishCalendar(JewishDate):
         return ((self.day_of_week != 7 and self.jewish_day == 14 and self.jewish_month == 1) or
                 (self.day_of_week == 5 and self.jewish_day == 12 and self.jewish_month == 1))
 
+    def is_shabbos_mevorchim(self) -> bool:
+        return self.day_of_week == 7 and self.jewish_month != 6 and self.jewish_day in range(23, 30)
+
     def is_rosh_chodesh(self) -> bool:
         return self.jewish_day == 30 or (self.jewish_day == 1 and self.jewish_month != 7)
 
