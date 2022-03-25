@@ -677,7 +677,7 @@ class TestJewishCalendar(unittest.TestCase):
         calendar = JewishCalendar(test.test_helper.standard_monday_chaseirim(), 7, 1)
         self.assertIsNone(calendar.day_of_omer())
 
-    def test_significant_shabbes_for_standard_monday_chaseirim(self):
+    def test_significant_shabbos_for_standard_monday_chaseirim(self):
         year = test.test_helper.standard_monday_chaseirim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -691,7 +691,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_standard_monday_shelaimim(self):
+    def test_significant_shabbos_for_standard_monday_shelaimim(self):
         year = test.test_helper.standard_monday_shelaimim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -705,7 +705,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_standard_tuesday_kesidran(self):
+    def test_significant_shabbos_for_standard_tuesday_kesidran(self):
         year = test.test_helper.standard_tuesday_kesidran()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -719,7 +719,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_standard_thursday_kesidran(self):
+    def test_significant_shabbos_for_standard_thursday_kesidran(self):
         year = test.test_helper.standard_thursday_kesidran()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -733,7 +733,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_standard_thursday_shelaimim(self):
+    def test_significant_shabbos_for_standard_thursday_shelaimim(self):
         year = test.test_helper.standard_thursday_shelaimim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -747,7 +747,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_standard_shabbos_chaseirim(self):
+    def test_significant_shabbos_for_standard_shabbos_chaseirim(self):
         year = test.test_helper.standard_shabbos_chaseirim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -761,7 +761,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_standard_shabbos_shelaimim(self):
+    def test_significant_shabbos_for_standard_shabbos_shelaimim(self):
         year = test.test_helper.standard_shabbos_shelaimim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -775,7 +775,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_monday_chaseirim(self):
+    def test_significant_shabbos_for_leap_monday_chaseirim(self):
         year = test.test_helper.leap_monday_chaseirim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -789,7 +789,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_monday_shelaimim(self):
+    def test_significant_shabbos_for_leap_monday_shelaimim(self):
         year = test.test_helper.leap_monday_shelaimim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -803,7 +803,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_tuesday_kesidran(self):
+    def test_significant_shabbos_for_leap_tuesday_kesidran(self):
         year = test.test_helper.leap_tuesday_kesidran()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -817,7 +817,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_thursday_chaseirim(self):
+    def test_significant_shabbos_for_leap_thursday_chaseirim(self):
         year = test.test_helper.leap_thursday_chaseirim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -831,7 +831,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_thursday_shelaimim(self):
+    def test_significant_shabbos_for_leap_thursday_shelaimim(self):
         year = test.test_helper.leap_thursday_shelaimim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -845,7 +845,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_shabbos_chaseirim(self):
+    def test_significant_shabbos_for_leap_shabbos_chaseirim(self):
         year = test.test_helper.leap_shabbos_chaseirim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
@@ -859,7 +859,7 @@ class TestJewishCalendar(unittest.TestCase):
         }
         self.assertEqual(result, expected)
 
-    def test_significant_shabbes_for_leap_shabbos_shelaimim(self):
+    def test_significant_shabbos_for_leap_shabbos_shelaimim(self):
         year = test.test_helper.leap_shabbos_shelaimim()
 
         result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
