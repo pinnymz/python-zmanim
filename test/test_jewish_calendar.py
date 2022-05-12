@@ -677,6 +677,202 @@ class TestJewishCalendar(unittest.TestCase):
         calendar = JewishCalendar(test.test_helper.standard_monday_chaseirim(), 7, 1)
         self.assertIsNone(calendar.day_of_omer())
 
+    def test_significant_shabbos_for_standard_monday_chaseirim(self):
+        year = test.test_helper.standard_monday_chaseirim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+                    'shabbos_shuva': ['7-6'],
+                    'parshas_shekalim': ['11-29'],
+                    'parshas_zachor': ['12-13'],
+                    'parshas_parah': ['12-20'],
+                    'parshas_hachodesh': ['12-27'],
+                    'shabbos_hagadol': ['1-12']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_standard_monday_shelaimim(self):
+        year = test.test_helper.standard_monday_shelaimim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-6'],
+            'parshas_shekalim': ['11-27'],
+            'parshas_zachor': ['12-11'],
+            'parshas_parah': ['12-18'],
+            'parshas_hachodesh': ['12-25'],
+            'shabbos_hagadol': ['1-10']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_standard_tuesday_kesidran(self):
+        year = test.test_helper.standard_tuesday_kesidran()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-5'],
+            'parshas_shekalim': ['11-27'],
+            'parshas_zachor': ['12-11'],
+            'parshas_parah': ['12-18'],
+            'parshas_hachodesh': ['12-25'],
+            'shabbos_hagadol': ['1-10']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_standard_thursday_kesidran(self):
+        year = test.test_helper.standard_thursday_kesidran()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-3'],
+            'parshas_shekalim': ['11-25'],
+            'parshas_zachor': ['12-9'],
+            'parshas_parah': ['12-23'],
+            'parshas_hachodesh': ['1-1'],
+            'shabbos_hagadol': ['1-8']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_standard_thursday_shelaimim(self):
+        year = test.test_helper.standard_thursday_shelaimim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-3'],
+            'parshas_shekalim': ['12-1'],
+            'parshas_zachor': ['12-8'],
+            'parshas_parah': ['12-22'],
+            'parshas_hachodesh': ['12-29'],
+            'shabbos_hagadol': ['1-14']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_standard_shabbos_chaseirim(self):
+        year = test.test_helper.standard_shabbos_chaseirim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-8'],
+            'parshas_shekalim': ['12-1'],
+            'parshas_zachor': ['12-8'],
+            'parshas_parah': ['12-22'],
+            'parshas_hachodesh': ['12-29'],
+            'shabbos_hagadol': ['1-14']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_standard_shabbos_shelaimim(self):
+        year = test.test_helper.standard_shabbos_shelaimim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-8'],
+            'parshas_shekalim': ['11-29'],
+            'parshas_zachor': ['12-13'],
+            'parshas_parah': ['12-20'],
+            'parshas_hachodesh': ['12-27'],
+            'shabbos_hagadol': ['1-12']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_monday_chaseirim(self):
+        year = test.test_helper.leap_monday_chaseirim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-6'],
+            'parshas_shekalim': ['12-27'],
+            'parshas_zachor': ['13-11'],
+            'parshas_parah': ['13-18'],
+            'parshas_hachodesh': ['13-25'],
+            'shabbos_hagadol': ['1-10']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_monday_shelaimim(self):
+        year = test.test_helper.leap_monday_shelaimim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-6'],
+            'parshas_shekalim': ['12-25'],
+            'parshas_zachor': ['13-9'],
+            'parshas_parah': ['13-23'],
+            'parshas_hachodesh': ['1-1'],
+            'shabbos_hagadol': ['1-8']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_tuesday_kesidran(self):
+        year = test.test_helper.leap_tuesday_kesidran()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-5'],
+            'parshas_shekalim': ['12-25'],
+            'parshas_zachor': ['13-9'],
+            'parshas_parah': ['13-23'],
+            'parshas_hachodesh': ['1-1'],
+            'shabbos_hagadol': ['1-8']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_thursday_chaseirim(self):
+        year = test.test_helper.leap_thursday_chaseirim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-3'],
+            'parshas_shekalim': ['13-1'],
+            'parshas_zachor': ['13-8'],
+            'parshas_parah': ['13-22'],
+            'parshas_hachodesh': ['13-29'],
+            'shabbos_hagadol': ['1-14']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_thursday_shelaimim(self):
+        year = test.test_helper.leap_thursday_shelaimim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-3'],
+            'parshas_shekalim': ['12-29'],
+            'parshas_zachor': ['13-13'],
+            'parshas_parah': ['13-20'],
+            'parshas_hachodesh': ['13-27'],
+            'shabbos_hagadol': ['1-12']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_shabbos_chaseirim(self):
+        year = test.test_helper.leap_shabbos_chaseirim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-8'],
+            'parshas_shekalim': ['12-29'],
+            'parshas_zachor': ['13-13'],
+            'parshas_parah': ['13-20'],
+            'parshas_hachodesh': ['13-27'],
+            'shabbos_hagadol': ['1-12']
+        }
+        self.assertEqual(result, expected)
+
+    def test_significant_shabbos_for_leap_shabbos_shelaimim(self):
+        year = test.test_helper.leap_shabbos_shelaimim()
+
+        result = test.test_helper.all_days_matching(year, lambda c: c.significant_shabbos())
+        expected = {
+            'shabbos_shuva': ['7-8'],
+            'parshas_shekalim': ['12-27'],
+            'parshas_zachor': ['13-11'],
+            'parshas_parah': ['13-18'],
+            'parshas_hachodesh': ['13-25'],
+            'shabbos_hagadol': ['1-10']
+        }
+        self.assertEqual(result, expected)
+
     def test_molad_as_datetime(self):
         expected_offset = (2, 20, 56, 496000)  # UTC is 2:20:56.496 behind Jerusalem Local Time
         calendar = JewishCalendar(5776, 8, 1)

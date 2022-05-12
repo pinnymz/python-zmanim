@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - `jewish_calendar.is_taanis_bechorim()` function added
 - `jewish_calendar.is_shabbos_mevorchim()` function added
+- `jewish_calendar.significant_shabbos()` function added
 
 ## [0.3.1] - 2020-11-05
 ### Added

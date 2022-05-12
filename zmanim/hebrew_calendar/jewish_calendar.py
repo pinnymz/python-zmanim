@@ -37,6 +37,28 @@ class JewishCalendar(JewishDate):
     def significant_day(self) -> Optional[str]:
         return getattr(self, f'_{self.jewish_month_name()}_significant_day', None)()
 
+    def significant_shabbos(self) -> Optional[str]:
+        if self.day_of_week != 7:
+            return None
+        if self.jewish_month == 1:
+            if self.jewish_day == 1:
+                return 'parshas_hachodesh'
+            elif self.jewish_day in range(8, 15):
+                return 'shabbos_hagadol'
+        elif self.jewish_month == 7 and self.jewish_day in range(3, 10):
+            return 'shabbos_shuva'
+        elif self.jewish_month == (self.months_in_jewish_year() - 1) and self.jewish_day in range(25, 31):
+            return 'parshas_shekalim'
+        elif self.jewish_month == self.months_in_jewish_year():
+            if self.jewish_day == 1:
+                return 'parshas_shekalim'
+            elif self.jewish_day in range(7, 14):
+                return 'parshas_zachor'
+            elif self.jewish_day in range(17, 24):
+                return 'parshas_parah'
+            elif self.jewish_day in range(24, 30):
+                return 'parshas_hachodesh'
+
     def is_assur_bemelacha(self) -> bool:
         return self.day_of_week == 7 or self.is_yom_tov_assur_bemelacha()
 
