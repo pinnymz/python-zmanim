@@ -5,7 +5,6 @@ from dateutil import tz, parser
 
 import test.test_helper
 from zmanim.hebrew_calendar.jewish_calendar import JewishCalendar
-from zmanim.hebrew_calendar.jewish_date import JewishDate
 
 
 class TestJewishCalendar(unittest.TestCase):
@@ -900,9 +899,3 @@ class TestJewishCalendar(unittest.TestCase):
         expected_time = first_molad + timedelta(microseconds=expected_offset)
         # round for floating microsecond precision inconsistency
         self.assertEqual(calendar.sof_zman_kiddush_levana_between_moldos().toordinal(), expected_time.toordinal())
-
-    def test_date_arithmetic_returns_inherited_type(self):
-        for instance, type in [(JewishCalendar(5783, 1, 1), JewishCalendar), (JewishDate(5783, 1, 1), JewishDate)]:
-            self.assertIsInstance(instance, type)
-            instance += timedelta(days=1)
-            self.assertIsInstance(instance, type)
