@@ -649,3 +649,12 @@ class TestJewishDate(unittest.TestCase):
         self.assertEqual(subject.jewish_month_name(), 'sivan')
         subject.jewish_month = 8
         self.assertEqual(subject.jewish_month_name(), 'cheshvan')
+
+    def test_date_arithmetic_returns_inherited_type(self):
+        class JewishDateChild(JewishDate):
+            pass
+
+        for instance, type in [(JewishDateChild(5783, 1, 1), JewishDateChild), (JewishDate(5783, 1, 1), JewishDate)]:
+            self.assertIsInstance(instance, type)
+            instance += timedelta(days=1)
+            self.assertIsInstance(instance, type)
