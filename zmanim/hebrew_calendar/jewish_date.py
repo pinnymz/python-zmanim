@@ -227,14 +227,14 @@ class JewishDate:
         if isinstance(addend, int):
             return copy.copy(self).forward(addend)
         elif isinstance(addend, timedelta):
-            return JewishDate(self.gregorian_date + addend)
+            return type(self)(self.gregorian_date + addend)
         raise ValueError
 
     def __sub__(self, subtrahend):
         if isinstance(subtrahend, int):
             return copy.copy(self).back(subtrahend)
         elif isinstance(subtrahend, timedelta):
-            return JewishDate(self.gregorian_date - subtrahend)
+            return type(self)(self.gregorian_date - subtrahend)
         elif isinstance(subtrahend, JewishDate):
             return self.gregorian_date - subtrahend.gregorian_date
         elif isinstance(subtrahend, date):
