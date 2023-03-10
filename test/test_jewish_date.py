@@ -658,3 +658,5 @@ class TestJewishDate(unittest.TestCase):
             self.assertIsInstance(instance, type)
             instance += timedelta(days=1)
             self.assertIsInstance(instance, type)
+            instance -= timedelta(days=1)
+            self.assertIsInstance(instance, type)
