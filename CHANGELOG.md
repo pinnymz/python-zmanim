@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `jewish_calendar.is_shabbos_mevorchim()` function added
 - `jewish_calendar.significant_shabbos()` function added
 
+### Fixed
+- Bug in `jewish_date.__add__()` and `jewish_date.__sub__()` returned the base JewishDate type even when inherited.
+
 ## [0.3.1] - 2020-11-05
 ### Added
 - repr() content for limudim structures
