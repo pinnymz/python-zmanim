@@ -62,7 +62,7 @@ class AstronomicalCalendar(MathHelper):
     def utc_sea_level_sunset(self, zenith: float) -> Optional[float]:
         return self.astronomical_calculator.utc_sunset(self._adjusted_date(), self.geo_location, zenith, adjust_for_elevation=False)
 
-    def temporal_hour(self, sunrise: Optional[datetime] = __sentinel, sunset: Optional[datetime] = __sentinel) -> Optional[float]:
+    def temporal_hour(self, sunrise: Optional[datetime] = __sentinel, sunset: Optional[datetime] = __sentinel) -> Optional[float]: # type: ignore
         if sunrise == self.__sentinel:
             sunrise = self.sea_level_sunrise()
         if sunset == self.__sentinel:
@@ -79,7 +79,10 @@ class AstronomicalCalendar(MathHelper):
         sunset = self.sea_level_sunset()
         if sunrise is None or sunset is None:
             return None
-        noon_hour = (self.temporal_hour(sunrise, sunset) / self.HOUR_MILLIS) * 6.0
+        temporal_hour = self.temporal_hour(sunrise, sunset)
+        if temporal_hour is None:
+            return None
+        noon_hour = (temporal_hour / self.HOUR_MILLIS) * 6.0
         return sunrise + timedelta(noon_hour / 24.0)
 
     def _date_time_from_time_of_day(self, time_of_day: Optional[float], mode: str) -> Optional[datetime]:
