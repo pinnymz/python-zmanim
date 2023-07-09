@@ -334,6 +334,37 @@ class TestZmanimCalendar(unittest.TestCase):
         calendar = ZmanimCalendar(geo_location=test_helper.lakewood(), date=parser.parse(date))
         self.assertTrue(calendar.is_assur_bemelacha(calendar.tzais() - timedelta(seconds=2), in_israel=True))
         self.assertTrue(calendar.is_assur_bemelacha(calendar.tzais() + timedelta(seconds=2), in_israel=True))
+    
+    def test_sof_zman_shma_gra_on_day_without_sunset_or_without_sunrise(self):
+        date = '2023-06-20'  # Middle of the North Pole summer
+        calendar = ZmanimCalendar(geo_location=test_helper.daneborg(), date=parser.parse(date))
+        self.assertEqual(calendar.sof_zman_shma_gra(), None)
+        
+        date = '2023-01-20'  # Middle of the North Pole Winter
+        calendar = ZmanimCalendar(geo_location=test_helper.daneborg(), date=parser.parse(date))
+        self.assertEqual(calendar.sof_zman_shma_gra(), None)
+    
+    def test_sof_zman_shma_mga_on_day_without_sunset_or_without_sunrise(self):
+        date = '2023-06-20'  # Middle of the North Pole summer
+        calendar = ZmanimCalendar(geo_location=test_helper.daneborg(), date=parser.parse(date))
+        self.assertEqual(calendar.sof_zman_shma_mga(), None)
+        
+        date = '2023-01-20'  # Middle of the North Pole Winter
+        calendar = ZmanimCalendar(geo_location=test_helper.daneborg(), date=parser.parse(date))
+        self.assertEqual(calendar.sof_zman_shma_mga(), None)
+    
+    def test__offset_by_minutes_zmanis_on_day_without_sunset_or_without_sunrise(self):
+        date = '2023-06-20'  # Middle of the North Pole summer
+        date_object = parser.parse(date)
+        calendar = ZmanimCalendar(geo_location=test_helper.daneborg(), date=date_object)
+        self.assertEqual(calendar._offset_by_minutes_zmanis(date_object,10), None)
+        
+        date = '2023-01-20'  # Middle of the North Pole Winter
+        date_object = parser.parse(date)
+        calendar = ZmanimCalendar(geo_location=test_helper.daneborg(), date=date_object)
+        self.assertEqual(calendar._offset_by_minutes_zmanis(date_object,10), None)
+        
+        
 
 
 if __name__ == '__main__':
