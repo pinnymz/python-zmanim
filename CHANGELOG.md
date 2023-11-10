@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `jewish_calendar.is_taanis_bechorim()` function added
 - `jewish_calendar.is_shabbos_mevorchim()` function added
 - `jewish_calendar.significant_shabbos()` function added
+- New `AmudYomiBavliDirshu` calculator for Amud Yomi Bavli following the Dirshu learning schedule
+- Support for limudim containing fractional units (required for Amud Yomi)
 
 ### Fixed
 - Bug in `jewish_date.__add__()` and `jewish_date.__sub__()` returned the base JewishDate type even when inherited.

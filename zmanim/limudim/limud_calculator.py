@@ -1,5 +1,7 @@
 from datetime import date
+from fractions import Fraction
 from functools import reduce
+from numbers import Number
 from typing import Optional, Union
 
 from zmanim.hebrew_calendar.jewish_date import JewishDate
@@ -37,7 +39,7 @@ class LimudCalculator:
         return None
 
     # Number of units to apply over an iteration
-    def unit_step(self) -> int:
+    def unit_step(self) -> Union[int, Fraction]:
         return 1
 
     # Are units components of some larger grouping? (e.g. pages or mishnayos)
@@ -94,30 +96,32 @@ class LimudCalculator:
     def is_skip_interval(self, interval: Interval) -> bool:
         return False
 
+    def base_unit(self) -> Union[int, Fraction]:
+        return self.unit_step() if self.fractional_units() else 1
+
     def tiered_units_for_interval(self, units: Union[dict, list], interval: Interval) -> Optional[Unit]:
         iteration = interval.iteration
-        offset = ((iteration - 1) * self.unit_step()) + 1
-        if self.unit_step() > 1:
-            offset2 = (offset - 1) + self.unit_step()
-        else:
-            offset2 = None
+        offset = ((iteration - 1) * self.unit_step()) + self.base_unit()
+        offset2 = (offset - 1) + self.unit_step() if self.unit_step() > 1 else None
         offsets = list(filter(None.__ne__, [offset, offset2]))
         targets = [[o, []] for o in offsets]
         results = self.find_offset_units(units, targets)
         if {r[0] for r in results} != {0}:
             return None
         paths = list(map(lambda r: r[1], results))
+        if self.fractional_units():
+            paths = list(map(lambda p: self._resolve_fractional_path(p), paths))
         return Unit(*paths)
 
-    def find_offset_units(self, units: dict, targets: list) -> list:
+    def find_offset_units(self, units: Union[dict, list], targets: list) -> list:
         def unit_reducer(t: list, name: str):
             attributes = units[name]
-            if isinstance(attributes, int):
+            if isinstance(attributes, (int, Fraction)):
                 start = self.starting_page(units, name)
-                length = (attributes - start) + 1
+                length = (attributes - start) + self.base_unit()
 
                 head = [e for e in t if e[0] == 0]
-                tail = [[0, p + [name, (start + o) - 1]] if o <= length else [o - length, p] for o, p in t if o != 0]
+                tail = [[0, p + [name, (start + o) - self.base_unit()]] if o <= length else [o - length, p] for o, p in t if o != 0]
                 return head + tail
             else:
                 head = [e for e in t if e[0] == 0]
@@ -138,3 +142,12 @@ class LimudCalculator:
     @staticmethod
     def _jewish_date(date):
         return date if isinstance(date, JewishDate) else JewishDate(date)
+
+    def _resolve_fractional_path(self, path: Union[list, Number]) -> Union[list, Number]:
+        if isinstance(path, Number):
+            index = int((path - int(path)) * len(self.fractional_units()))
+            return [int(path), self.fractional_units()[index]]
+        elif isinstance(path, list):
+            return path[:-1] + self._resolve_fractional_path(path[-1])
+        else:
+            return path

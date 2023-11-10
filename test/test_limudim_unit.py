@@ -12,9 +12,21 @@ class TestLimudimUnit(unittest.TestCase):
         subject = Unit(['berachos', 3])
         self.assertEqual(str(subject), 'berachos 3')
 
-    def test_str_for_a_multi_level_unit(self):
+    def test_str_for_a_multi_level_unit_with_integers(self):
         subject = Unit(['berachos', 3, 5, 7, 4, 5])
         self.assertEqual(str(subject), 'berachos 3:5:7:4:5')
+
+    def test_str_for_a_multi_level_unit_with_a_character(self):
+        subject = Unit(['berachos', 'a'])
+        self.assertEqual(str(subject), 'berachos a')
+
+    def test_str_for_a_multi_level_unit_with_integer_and_then_a_character(self):
+        subject = Unit(['berachos', 13, 'a'])
+        self.assertEqual(str(subject), 'berachos 13a')
+
+    def test_str_for_a_multi_level_unit_with_integer_and_then_a_character_and_rlm_marker(self):
+        subject = Unit(['berachos', 13, u'a\u200f'])
+        self.assertEqual(str(subject), u'berachos 13a\u200f')
 
     def test_str_for_a_multi_component_primitive_unit(self):
         subject = Unit('tazria', 'metzora')

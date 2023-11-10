@@ -39,7 +39,16 @@ class Unit:
 
     @staticmethod
     def _render_extension(extension: list) -> str:
-        return ':'.join(map(str, extension))
+        if len(extension) == 1:
+            return str(extension[0])
+        else:
+            delimiter = '' if Unit._is_character_extension(extension[-1]) else ':'
+            return Unit._render_extension(extension[:-1]) + delimiter + str(extension[-1])
+
+    @staticmethod
+    def _is_character_extension(component: Any) -> bool:
+        # single character extensions are appended directly as 'amud', R-to-L markers should be ignored
+        return isinstance(component, str) and not component.isnumeric() and len(component.replace(u'\u200f', '')) == 1
 
     def _render_secondary(self, second_component: list, first_component: list) -> str:
         if second_component is None:
