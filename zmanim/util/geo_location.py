@@ -1,5 +1,5 @@
-from datetime import datetime
-from typing import Optional
+from datetime import datetime, tzinfo
+from typing import Optional, Union
 
 from dateutil import tz
 
@@ -62,13 +62,16 @@ class GeoLocation(MathHelper):
             raise TypeError("input must be a number or a list in the format 'degrees,minutes,seconds,direction'")
 
     @property
-    def time_zone(self) -> tz.tzfile:
+    def time_zone(self) -> Union[tz.tzfile,tzinfo]:
         return self.__time_zone
 
     @time_zone.setter
     def time_zone(self, time_zone):
         if isinstance(time_zone, str):
-            self.__time_zone = tz.gettz(time_zone)
+            time_zone = tz.gettz(time_zone)
+            if time_zone is None:
+                raise ValueError("invalid time zone")
+            self.__time_zone = time_zone
         elif isinstance(time_zone, tz.tzfile):
             self.__time_zone = time_zone
         else:
@@ -109,7 +112,14 @@ class GeoLocation(MathHelper):
 
     def standard_time_offset(self) -> int:
         now = datetime.now(tz=self.time_zone)
-        return int((now.utcoffset() - now.dst()).total_seconds()) * 1000
+        utcoffset = now.utcoffset()
+        dst = now.dst()
+        if utcoffset is None or dst is None:
+            raise ValueError("Could not determine time zone offset or DST")
+        return int((utcoffset - dst).total_seconds()) * 1000
 
     def time_zone_offset_at(self, utc_time: datetime) -> float:
-        return utc_time.astimezone(self.time_zone).utcoffset().total_seconds() / 3600.0
+        utcoffset = utc_time.astimezone(self.time_zone).utcoffset()
+        if utcoffset is None:
+            raise ValueError("Could not determine time zone offset")
+        return utcoffset.total_seconds() / 3600.0

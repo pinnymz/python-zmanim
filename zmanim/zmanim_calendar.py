@@ -6,7 +6,7 @@ from zmanim.hebrew_calendar.jewish_calendar import JewishCalendar
 
 
 class ZmanimCalendar(AstronomicalCalendar):
-    def __init__(self, candle_lighting_offset: int = None, *args, **kwargs):
+    def __init__(self, candle_lighting_offset: Optional[int] = None, *args, **kwargs):
         super(ZmanimCalendar, self).__init__(*args, **kwargs)
         self.candle_lighting_offset = 18 if candle_lighting_offset is None else candle_lighting_offset
         self.use_elevation = False
@@ -56,14 +56,22 @@ class ZmanimCalendar(AstronomicalCalendar):
     def candle_lighting(self) -> Optional[datetime]:
         return self._offset_by_minutes(self.sea_level_sunset(), -self.candle_lighting_offset)
 
-    def sof_zman_shma(self, day_start: datetime, day_end: datetime) -> datetime:
+    def sof_zman_shma(self, day_start: datetime, day_end: datetime) -> Optional[datetime]:
         return self._shaos_into_day(day_start, day_end, 3)
 
-    def sof_zman_shma_gra(self) -> datetime:
-        return self.sof_zman_shma(self.elevation_adjusted_sunrise(), self.elevation_adjusted_sunset())
+    def sof_zman_shma_gra(self) -> Optional[datetime]:
+        elevation_adjusted_sunrise = self.elevation_adjusted_sunrise()
+        elevation_adjusted_sunset = self.elevation_adjusted_sunset()
+        if elevation_adjusted_sunrise is None or elevation_adjusted_sunset is None:
+            return None
+        return self.sof_zman_shma(elevation_adjusted_sunrise, elevation_adjusted_sunset)
 
-    def sof_zman_shma_mga(self) -> datetime:
-        return self.sof_zman_shma(self.alos_72(), self.tzais_72())
+    def sof_zman_shma_mga(self) -> Optional[datetime]:
+        alos_72 = self.alos_72()
+        tzais_72 = self.tzais_72()
+        if alos_72 is None or tzais_72 is None:
+            return None
+        return self.sof_zman_shma(alos_72, tzais_72)
 
     def sof_zman_tfila(self, day_start: Optional[datetime], day_end: Optional[datetime]) -> Optional[datetime]:
         return self._shaos_into_day(day_start, day_end, 4)
@@ -111,17 +119,25 @@ class ZmanimCalendar(AstronomicalCalendar):
         opts = {'degrees': degrees, 'offset': offset}
         return self.shaah_zmanis(self.alos(opts), self.tzais(opts))
 
-    def is_assur_bemelacha(self, current_time: datetime, tzais=None, in_israel: Optional[bool]=False):
+    def is_assur_bemelacha(self, current_time: datetime, tzais=None, in_israel: Optional[bool]=False) -> Optional[bool]:
         if tzais is None:
             tzais_time = self.tzais()
         elif isinstance(tzais, dict):
             tzais_time = self.tzais(tzais)
         else:
             tzais_time = tzais
+        
+        if tzais_time is None:
+            return None 
+        
+        elevation_adjusted_sunset = self.elevation_adjusted_sunset()
+        if elevation_adjusted_sunset is None:
+            return None
+        
         jewish_calendar = JewishCalendar(current_time.date())
         jewish_calendar.in_israel = in_israel
         return (current_time <= tzais_time and jewish_calendar.is_assur_bemelacha()) or \
-               (current_time >= self.elevation_adjusted_sunset() and jewish_calendar.is_tomorrow_assur_bemelacha())
+               (current_time >= elevation_adjusted_sunset and jewish_calendar.is_tomorrow_assur_bemelacha())
 
     def _shaos_into_day(self, day_start: Optional[datetime], day_end: Optional[datetime], shaos: float) -> Optional[datetime]:
         shaah_zmanis = self.temporal_hour(day_start, day_end)
@@ -143,5 +159,8 @@ class ZmanimCalendar(AstronomicalCalendar):
     def _offset_by_minutes_zmanis(self, time: Optional[datetime], minutes: float) -> Optional[datetime]:
         if time is None:
             return None
-        shaah_zmanis_skew = self.shaah_zmanis_gra() / self.HOUR_MILLIS
+        shaah_zmanis_gra = self.shaah_zmanis_gra()
+        if shaah_zmanis_gra is None:
+            return None
+        shaah_zmanis_skew = shaah_zmanis_gra / self.HOUR_MILLIS
         return time + timedelta(minutes=minutes*shaah_zmanis_skew)

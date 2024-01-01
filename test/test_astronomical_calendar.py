@@ -209,6 +209,14 @@ class TestAstronomicalCalendar(unittest.TestCase):
 
         for entry in expected:
             self.assertEqual(test_entry(entry[0]), entry)
+    
+    def test_temporal_hour_on_day_without_sunset_or_without_sunrise(self):
+        calc = AstronomicalCalendar(date=date(2023, 6, 20)) # Middle of the North Pole summer
+        calc.geo_location = test_helper.daneborg()
+        self.assertIsNone(calc.temporal_hour())
+        calc = AstronomicalCalendar(date=date(2023, 1, 20)) # Middle of the North Pole winter
+        calc.geo_location = test_helper.daneborg()
+        self.assertIsNone(calc.temporal_hour())
 
 
 if __name__ == '__main__':

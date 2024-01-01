@@ -1,15 +1,16 @@
 import copy
-from datetime import date, timedelta
+from datetime import timedelta
+from datetime import date as dt_date
 from enum import Enum
 from memoization import cached
-from typing import Optional
+from typing import Optional, Tuple
 
 
 class JewishDate:
     MONTHS = Enum('Months', 'nissan iyar sivan tammuz av elul tishrei cheshvan kislev teves shevat adar adar_ii')
     MONTHS_LIST = list(MONTHS)
 
-    RD = date(1, 1, 1)
+    RD = dt_date(1, 1, 1)
     JEWISH_EPOCH = -1373429
 
     CHALAKIM_PER_MINUTE = 18
@@ -26,7 +27,7 @@ class JewishDate:
             self.reset_date()
         elif len(args) == 3:
             self.set_jewish_date(*args, **kwargs)
-        elif len(args) == 1 and isinstance(args[0], date):
+        elif len(args) == 1 and isinstance(args[0], dt_date):
             self.date = args[0]
         elif len(args) == 1 and isinstance(args[0], int):
             self._set_from_molad(*args)
@@ -39,7 +40,7 @@ class JewishDate:
                 self.jewish_date, self.day_of_week, self.molad_hours, self.molad_minutes, self.molad_chalakim)
 
     @property
-    def gregorian_date(self) -> date:
+    def gregorian_date(self) -> dt_date:
         return self.__gregorian_date
 
     @property
@@ -71,7 +72,7 @@ class JewishDate:
         return self.__day_of_week
 
     @property
-    def jewish_date(self) -> (int, int, int):
+    def jewish_date(self) -> Tuple[int, int, int]:
         return self.__jewish_year, self.__jewish_month, self.__jewish_day
 
     @property
@@ -131,11 +132,11 @@ class JewishDate:
         return cls(year, month, date)
 
     @classmethod
-    def from_date(cls, date: date) -> 'JewishDate':
+    def from_date(cls, date: dt_date) -> 'JewishDate':
         return cls(date)
 
     def reset_date(self) -> 'JewishDate':
-        self.date = date.today()
+        self.date = dt_date.today()
         return self
 
     def set_jewish_date(self, year: int, month: int, day: int, hours: int = 0, minutes: int = 0, chalakim: int = 0):
@@ -159,7 +160,7 @@ class JewishDate:
             raise ValueError("invalid date parts")
         max_days = self.days_in_gregorian_month(month, year)
         day = max_days if day > max_days else day
-        self.date = date(year, month, day)
+        self.date = dt_date(year, month, day)
 
     def forward(self, increment: int = 1) -> 'JewishDate':
         if increment < 0:
@@ -237,7 +238,7 @@ class JewishDate:
             return type(self)(self.gregorian_date - subtrahend)
         elif isinstance(subtrahend, JewishDate):
             return self.gregorian_date - subtrahend.gregorian_date
-        elif isinstance(subtrahend, date):
+        elif isinstance(subtrahend, dt_date):
             return self.gregorian_date - subtrahend
         raise ValueError
 
@@ -366,7 +367,7 @@ class JewishDate:
             year = self.jewish_year
         return self._is_jewish_leap_year(year)
 
-    def cheshvan_kislev_kviah(self, year: Optional[int] = None) -> str:
+    def cheshvan_kislev_kviah(self, year: Optional[int] = None) -> CHESHVAN_KISLEV_KEVIAH:
         if year is None:
             year = self.jewish_year
         year_type = (self.days_in_jewish_year(year) % 10) - 3
@@ -382,7 +383,7 @@ class JewishDate:
         pesach_day = date.day_of_week
         return rosh_hashana_day, kviah_value, pesach_day
 
-    def molad(self, month: int = None, year: Optional[int] = None) -> 'JewishDate':
+    def molad(self, month: Optional[int] = None, year: Optional[int] = None) -> 'JewishDate':
         if month is None:
             month = self.jewish_month
         if year is None:
@@ -419,7 +420,7 @@ class JewishDate:
         return self.day_number_of_jewish_year(year, month, day) + \
                self._jewish_year_start_to_abs_date(year) - 1
 
-    def _jewish_date_from_abs_date(self, absolute_date: int) -> (int, int, int):
+    def _jewish_date_from_abs_date(self, absolute_date: int) -> Tuple[int, int, int]:
         jewish_year = int((absolute_date - self.JEWISH_EPOCH) / 366)
 
         # estimate may be low for CE
@@ -437,11 +438,11 @@ class JewishDate:
 
         return jewish_year, jewish_month, jewish_day
 
-    def _gregorian_date_to_abs_date(self, gregorian_date: date) -> int:
+    def _gregorian_date_to_abs_date(self, gregorian_date: dt_date) -> int:
         return gregorian_date.toordinal()
 
-    def _gregorian_date_from_abs_date(self, absolute_date: int) -> date:
-        return date.fromordinal(absolute_date)
+    def _gregorian_date_from_abs_date(self, absolute_date: int) -> dt_date:
+        return dt_date.fromordinal(absolute_date)
 
     def _molad_to_abs_date(self, chalakim: int) -> int:
         return int(chalakim / self.CHALAKIM_PER_DAY) + self.JEWISH_EPOCH
@@ -516,7 +517,7 @@ class JewishDate:
         return count
 
     @staticmethod
-    def _molad_components_for_year(year: int) -> (int, int):
+    def _molad_components_for_year(year: int) -> Tuple[int, int]:
         chalakim = JewishDate._chalakim_since_molad_tohu(year, 7)  # chalakim up to tishrei of given year
         days, remainder = divmod(chalakim, JewishDate.CHALAKIM_PER_DAY)
         return int(days), int(remainder)
